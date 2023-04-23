@@ -26,7 +26,7 @@ class FaceDetect:
         # print(faceImg)
         # [[76 31 51 51]]   x y w h
         # print(faceRects)
-        # for x, y, w, h in faceRects:
+        for x, y, w, h in faceRects:
             cv2.rectangle(faceImg, (x, y), (x + w, y + h), color=(255, 255, 0), thickness=1)
         cv2.imshow('img', faceImg)
         cv2.waitKey(0)
