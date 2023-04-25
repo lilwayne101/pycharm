@@ -7,6 +7,7 @@
 """
 import copy
 import cv2
+import numpy as np
 
 
 # 定义一个人脸操作的类
@@ -69,8 +70,31 @@ class FaceDetect:
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
+    def drawLogoMethod02(self, logo):
+        logo_gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY)
+        retval, logo_binary = cv2.threshold(logo_gray, 200, 255, cv2.THRESH_BINARY)
+        # retval, logo_binary = cv2.threshold(logo_gray, 200, 255, cv2.THRESH_OTSU)
+        # print(retval)
+        # 找轮廓
+        # 参数2：轮廓的存放层级关系
+        # 参数3：存储轮廓的拐角点
+        contours, hierarchy = cv2.findContours(logo_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # 绘制轮廓
+        # 创建一个黑色背景图
+        mask = np.zeros(logo_binary.shape, dtype=np.uint8)
+        cv2.drawContours(mask, contours, 0, color=(255, 255, 255), thickness=5)
+        cv2.imshow('logo', logo)
+        cv2.imshow('logo_gray', logo_gray)
+        cv2.imshow('logo_binary', logo_binary)
+        cv2.imshow('mask', mask)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        pass
 
-# faceDetect = FaceDetect()
+
+
+faceDetect = FaceDetect()
 # faceDetect.face_detect()
-# logo = cv2.imread("./Image/logo.png")
+logo = cv2.imread("./Image/logo.png")
 # faceDetect.draw_logo(logo)
+faceDetect.drawLogoMethod02(logo)
