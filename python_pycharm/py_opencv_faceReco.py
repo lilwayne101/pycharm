@@ -9,6 +9,7 @@ import copy
 import cv2
 
 
+# 定义一个人脸操作的类
 class FaceDetect:
     def __init__(self):
         # 创建一个级联分类器,用来识别人脸使用
