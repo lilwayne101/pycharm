@@ -11,8 +11,10 @@ import cv2
 
 class FaceDetect:
     def __init__(self):
-        # 创建一个级联分类器,用来识别人脸使用
+        # 初始化定义人脸矩形列表
         self.faceRects = None
+        # 创建一个级联分类器,用来识别人脸使用
+        #
         self.faceImg = cv2.imread(r".\Image\LENIN3.jpg")
         self.classifier = cv2.CascadeClassifier()
         # 加载特征文件
@@ -24,17 +26,16 @@ class FaceDetect:
         classifier = self.classifier
         # 识别图像中的人脸  返回矩形区域  使用列表进行存储
         self.faceRects = classifier.detectMultiScale(face_img)
-        # print(faceImg)
-        # [[76 31 51 51]]   x y w h
-        # print(faceRects)
+        # 绘制人脸矩形
         for x, y, w, h in self.faceRects:
             cv2.rectangle(face_img, (x, y), (x + w, y + h), color=(255, 255, 0), thickness=1)
+        # 显示face_img
         cv2.imshow('img', face_img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
     # 绘制logo
-    def draw_logo(self, logo):
+    def draw_logo(self, logo_img):
         face_rects = self.faceRects
         print(face_rects)
         face_img = self.faceImg
