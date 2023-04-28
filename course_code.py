@@ -580,6 +580,7 @@ import numpy as np
     Day-5
 """
 
+
 # def 函数名(形参1,.....)
 #     pass
 
@@ -782,7 +783,7 @@ import numpy as np
 #     cards.append(card)
 #     return card
 #
-#
+
 # def revise_card():
 #     global cards
 #     print("正在修改名片...")
@@ -803,7 +804,8 @@ import numpy as np
 #     global cards
 #     print("正在输出名片...")
 #     for index, card in enumerate(cards):
-#         print(f"姓名：{card['name']}\t年龄:{card['age']}\t性别:{card['sex']}\ttel:{card['tel']}\taddr:{card['addr']}")
+#         print(f"姓名：{card['name']}\t年龄:{card['age']}\t性别:{card['sex']}
+#         \ttel:{card['tel']}\taddr:{card['addr']}")
 #     pass
 #
 #
@@ -817,10 +819,8 @@ import numpy as np
 #     if month < 2:
 #         return 2
 #     else:
-#         for m in range(2, month + 1):
-#             num_temp = 0
-#             num_temp += num[m - 1] + num[m - 2]
-#             num.append(num_temp)
+#         for m in range(2, month):
+#             num.append(num[m - 1] + num[m - 2])
 #             print(num)
 #     return num[-1]
 #
@@ -828,7 +828,12 @@ import numpy as np
 # print(count(10))
 
 
-
-
-
-
+# def count(month: int):
+#     if month > 2:
+#         total = count(month - 1) + count(month - 2)
+#         return total
+#     else:
+#         return 1
+#
+#
+# print(count(10))

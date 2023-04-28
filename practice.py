@@ -49,12 +49,17 @@ from matplotlib import pyplot as plt
 # plt.show()
 
 # tanh(双曲正切)
-x = np.arange(-10, 10, 0.01)
-y = np.tanh(x)
-plt.plot(x, y)
-plt.show()
-plt.close()
+# x = np.arange(-10, 10, 0.01)
+# y = np.tanh(x)
+# plt.plot(x, y)
+# plt.show()
+# plt.close()
 
 
 # Softmax(归一化指数函数)(输出函数)
+
+import torch
+
+t1 = torch.
+
 
