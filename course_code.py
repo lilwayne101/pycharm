@@ -854,223 +854,247 @@ import numpy as np
 #     print(stu)
 
 
-class Score:
-    num = 3
-
-    # 初始化对象属性
-    def __init__(self, math, chinese, english):
-        self.math = math
-        self.chinese = chinese
-        self.english = english
-
-    # def __getattr__(self, item):
-    #     return self.class_list[item]
-
-
-class Student:
-
-    # 初始化对象属性
-    def __init__(self, name, age, score: Score):
-        self.name = name
-        self.age = age
-        self.score = score
-
-
-class Students:
-    stu_list = []
-    stu_dict_list = []
-
-    # 添加学生信息
-    def add_stu(self, stu: Student):
-        Students.stu_list.append(Student(stu.name, stu.age, stu.score))
-
-    # 输出学生信息
-    def stus_info(self):
-        stu_dict = {}
-        for index, stu_info in enumerate(Students.stu_list):
-            stu_dict["姓名"] = stu_info.name
-            stu_dict["年龄"] = stu_info.age
-            stu_dict["数学成绩"] = stu_info.score.__dict__["math"]
-            stu_dict["语文成绩"] = stu_info.score.__dict__["chinese"]
-            stu_dict["英语成绩"] = stu_info.score.__dict__["english"]
-            Students.stu_dict_list.append(stu_dict)
-            print(stu_dict)
-        return Students.stu_dict_list
-
-    # 学生列表长度
-    def __len__(self):
-        return len(Students.stu_list)
-
-
-class Operate(Students):
-
-    # 单个学生平均成绩
-    def stu_mean(self):
-        list_stu = []
-        len_temp = Score.num
-        for index, stu_info in enumerate(Students.stu_list):
-            list_stu.append(sum(list(stu_info.score.__dict__.values())) / len_temp)
-            print(f"{stu_info.name}的平均成绩为：{list_stu[index]}")
-        return list_stu
-
-    # 全班学生平均成绩
-    def stus_mean(self):
-        len_temp = len(Students.stu_list)
-        mean = [float(0) for i in range(len_temp)]
-        for index, stu_info in enumerate(Students.stu_list):
-            i = 0
-            for key, value in stu_info.score.__dict__.items():
-                mean[i] += value / len_temp
-                mean[i] = round(mean[i], 2)
-                i += 1
-
-        # print(f"所有学生的数学平均成绩为：{mean[0]}\n所有学生的语文平均成绩为：{mean[1]}\n所有学生的英语平均成绩为：{mean[2]}")
-        return mean
-
-
-student = Students()
-student.add_stu(Student('bob', 19, Score(89, 88, 87)))
-student.add_stu(Student('sunny', 12, Score(86, 98, 86)))
-student.add_stu(Student('jack', 13, Score(90, 76, 53)))
-student.stus_info()
-op = Operate()
-op.stu_mean()
-print(op.stus_mean())
+# class Score:
+#     num = 3
+#
+#     # 初始化对象属性
+#     def __init__(self, math, chinese, english):
+#         self.math = math
+#         self.chinese = chinese
+#         self.english = english
+#
+#     # def __getattr__(self, item):
+#     #     return self.class_list[item]
+#
+#
+# class Student:
+#
+#     # 初始化对象属性
+#     def __init__(self, name, age, score: Score):
+#         self.name = name
+#         self.age = age
+#         self.score = score
+#
+#
+# class Students:
+#     stu_list = []
+#     stu_dict_list = []
+#
+#     # 添加学生信息
+#     def add_stu(self, stu: Student):
+#         Students.stu_list.append(Student(stu.name, stu.age, stu.score))
+#
+#     # 输出学生信息
+#     def stus_info(self):
+#         stu_dict = {}
+#         for index, stu_info in enumerate(Students.stu_list):
+#             stu_dict["姓名"] = stu_info.name
+#             stu_dict["年龄"] = stu_info.age
+#             stu_dict["数学成绩"] = stu_info.score.__dict__["math"]
+#             stu_dict["语文成绩"] = stu_info.score.__dict__["chinese"]
+#             stu_dict["英语成绩"] = stu_info.score.__dict__["english"]
+#             Students.stu_dict_list.append(stu_dict)
+#             print(stu_dict)
+#         return Students.stu_dict_list
+#
+#     # 学生列表长度
+#     def __len__(self):
+#         return len(Students.stu_list)
+#
+#
+# class Operate(Students):
+#
+#     # 单个学生平均成绩
+#     def stu_mean(self):
+#         list_stu = []
+#         len_temp = Score.num
+#         for index, stu_info in enumerate(Students.stu_list):
+#             list_stu.append(sum(list(stu_info.score.__dict__.values())) / len_temp)
+#             print(f"{stu_info.name}的平均成绩为：{list_stu[index]}")
+#         return list_stu
+#
+#     # 全班学生平均成绩
+#     def stus_mean(self):
+#         len_temp = len(Students.stu_list)
+#         mean = [float(0) for i in range(len_temp)]
+#         for index, stu_info in enumerate(Students.stu_list):
+#             i = 0
+#             for key, value in stu_info.score.__dict__.items():
+#                 mean[i] += value / len_temp
+#                 mean[i] = round(mean[i], 2)
+#                 i += 1
+#
+#         # print(f"所有学生的数学平均成绩为：{mean[0]}\n所有学生的语文平均成绩为：{mean[1]}\n所有学生的英语平均成绩为：{mean[2]}")
+#         return mean
+#
+#
+# student = Students()
+# student.add_stu(Student('bob', 19, Score(89, 88, 87)))
+# student.add_stu(Student('sunny', 12, Score(86, 98, 86)))
+# student.add_stu(Student('jack', 13, Score(90, 76, 53)))
+# student.stus_info()
+# op = Operate()
+# op.stu_mean()
+# print(op.stus_mean())
 
 """
     创建一个学校 科目 班级 老师 学生
     求：老师最高工资，平均工资，最低工资，每个老师上的科目，带的班级是什么
     每个学生学的科目是什么老师 平均成绩 最擅长科目
 """
+import json
+from course_code_package.school import School
+from course_code_package.teacher import Teacher
+from course_code_package.student import Student
+# from course_code_package.subject import Subject
+from course_code_package.operate import Operate
+from course_code_package.class_stu import Class
+from course_code_package.data_read_write import DataReadWrite
 
 
-class School:
-    def __init__(self, school_name):
-        self.sn = school_name
-    pass
+class_dic_init = {
+    "一班": [["一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}],
+             ["一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}]],
+    '二班': [["二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}],
+             ["二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}]],
+    '三班': [["三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}],
+             ["三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}]],
+    '四班': [["四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}],
+             ["四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78}]]
+}
 
+teacher_list_init = {
+    '1': ['张老师', 4566, "数学", ["一班", '三班']],
+    '2': ['王老师', 7456, "数学", ["二班", '四班']],
+    '3': ['赵老师', 9879, "语文", ["一班", '二班']],
+    '4': ['钱老师', 2345, "语文", ["二班", '四班']],
+    '5': ['孙老师', 5675, "英语", ["一班", '二班']],
+    '6': ['李老师', 10933, "英语", ["二班", '四班']],
+}
 
-class Class:
-    def __init__(self, class_name, students_list):
-        self.stu_list = students_list
-        self.name = class_name
+student_list_init = {
+    '1': ["一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}],
+    '2': ["一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}],
+    '3': ["二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}],
+    '4': ["二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}],
+    '5': ["三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}],
+    '6': ["三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}],
+    '7': ["四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}],
+    '8': ["四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78}]
+}
 
-    pass
+# 写数据
+path_temp = r"./course_code_data_file"
+data_r_w = DataReadWrite()
+# data_r_w.data_write(teacher_list, path_temp + '//' + 'teacher_data')
+# data_r_w.data_write(student_list, path_temp + '//' + 'student_data')
+# data_r_w.data_write(class_dic, path_temp + '//' + 'class_data')
 
+# 读数据
+t = data_r_w.data_read(path_temp + '//' + 'teacher_data')
+teacher_list_temp = [t[str(i)] for i in range(1, len(t) + 1)]
+s = data_r_w.data_read(path_temp + '//' + 'student_data')
+student_list_temp = [s[str(i)] for i in range(1, len(s) + 1)]
+class_list = data_r_w.data_read(path_temp + '//' + 'class_data')
 
-class Subject:
-    def __init__(self, math, chinese, english):
-        self.math = math
-        self.cne = chinese
-        self.eng = english
-    pass
-
-    def __getattr__(self, item):
-        pass
-
-
-class Teacher:
-    def __init__(self, teacher_name, salary, teach_subject, class_t_list):
-        self.name = teacher_name
-        self.salary = salary
-        self.t_sub = teach_subject
-        self.c_list = class_t_list
-    pass
-
-
-class Student:
-    def __init__(self, stu_class, stu_name, sex, subject_score: dict):
-        self.stu_class = stu_class
-        self.name = stu_name
-        self.sex = sex
-        self.sub_score = subject_score
-    pass
-
-
-class Operate:
-
-    def max_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return max(salary_list)
-
-    def mean_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return sum(salary_list) / len(salary_list)
-
-    def min_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return min(salary_list)
-
-    def show_teacher(self, teacher_list):
-        for teacher in teacher_list:
-            print(f"\n{teacher.name}教:", end='')
-            for sub in teacher.t_sub:
-                print(f"{sub}", end='\t')
-            print(f"\n{teacher.name}带:", end='')
-            for c in teacher.c_list:
-                print(f"{c}", end='\t')
-
-    def stu_teacher(self, student_list, teacher_list):
-        print()
-        for stu in student_list:
-            for sub in list(stu.sub_score.keys()):
-                for thr in teacher_list:
-                    if sub == thr.t_sub and stu.stu_class in thr.c_list:
-                        print(f"{stu.name}的{sub}科目的老师为{thr.name}")
-
-    def mean_score_stu(self, student_list):
-        for stu in student_list:
-            score_list = list(stu.sub_score.values())
-            print(f"{stu.name}的平均分为{round(sum(score_list) / len(stu.sub_score), 2)}")
-
-    def good_at_sub(self, student_list):
-        for stu in student_list:
-            score_list = list(stu.sub_score.values())
-            index = score_list.index(max(score_list))
-            sub = list(stu.sub_score.keys())[index]
-            print(f"{stu.name}最擅长的科目是：{sub}")
-
-# class (self, class_name, students_list):
-# teacher (self, teacher_name, salary, teach_subject, class_t_list):
-# student (self, stu_class, stu_name, sex, subject_score: dict):
-
-
-school = School("成都中学")
-class_list = [
-    Class('一班', [Student("一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}),
-                   Student("一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70})]),
-    Class('二班', [Student("二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}),
-                   Student("二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98})]),
-    Class('三班', [Student("三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}),
-                   Student("三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88})]),
-    Class('四班', [Student("四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}),
-                   Student("四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78})]),
-]
-teacher_list = [
-    Teacher('张老师', 4566, "数学", ["一班", '三班']),
-    Teacher('王老师', 7456, "数学", ["二班", '四班']),
-    Teacher('赵老师', 9879, "语文", ["一班", '二班']),
-    Teacher('钱老师', 2345, "语文", ["二班", '四班']),
-    Teacher('孙老师', 5675, "英语", ["一班", '二班']),
-    Teacher('李老师', 10933, "英语", ["二班", '四班']),
-]
-student_list = [
-    Student("一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}),
-    Student("一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}),
-    Student("二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}),
-    Student("二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}),
-    Student("三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}),
-    Student("三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}),
-    Student("四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}),
-    Student("四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78})
-]
+# print(class_list)
+# 创建对象
 op = Operate()
-op.max_salary(teacher_list)
-op.min_salary(teacher_list)
-op.mean_salary(teacher_list)
+class_list = op.create_class_list(class_list)
+print(class_list)
+student_list = op.create_student_list(student_list_temp)
+print(student_list)
+teacher_list = op.create_teacher_list(teacher_list_temp)
+print(teacher_list)
+
+print(op.max_salary(teacher_list))
+print(op.min_salary(teacher_list))
+print(op.mean_salary(teacher_list))
 op.show_teacher(teacher_list)
 op.stu_teacher(student_list, teacher_list)
 op.mean_score_stu(student_list)
 op.good_at_sub(student_list)
 
 
+# 常用的魔法方法
+# __dict__ 字典化对象属性
+# class Abc:
+#     list1 = []
+#     b = 12
+#
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.age = age
+#         self.data = {}
+#
+#
+#     # 调用不存在的属性时自动调用
+#     def __getattr__(self, item):
+#         return print(f"不存在{item}")
+#         pass
+#
+#     # 定义一次对象成员时 自动调用一次
+#     def __setattr__(self, key, value):
+#         print("调用setattr")
+#         self.__dict__[key] = value
+#
+#     # 将实例对象以列表形式调用时自动调用
+#     def __getitem__(self, item):
+#         print(item)
+#
+#     # 将对象以列表形式赋值(字典赋值)时自动调用
+#     # 类似
+#     def __setitem__(self, key, value):
+#         print("调用setitem")
+#         self.__dict__[key] = value
+#
+#
+# a = Abc('BOB', 12)
+# # print(Abc[2])
+# a['jab'] = 'mouse'
+# # print(a['jab'])
+
+# print(a.list1)
+# #
+# print(a.__dict__)
+# print(len(a.__dict__))
+# print(Abc.__dict__)
+# print(len(Abc.__dict__))
+# # 示例化的对象是一个拥有类属性的独立对象
+# print(a.b)
+# a.b = 100
+# # 示例化的对象可以对自己拥有的原来的类属性进行修改
+# print(a.b)
+# # 示例化的对象对无法类的属性进行修改
+# print(Abc.b)
+# Abc.b = 1000
+# print(Abc.b)
+
+
+# 常量
+# ABC_CORE = 111
+
+# 引入模块
+# import 模块名
+
+# 引入模块中的类并改名
+# from 模块名 import 类名 as 新类名
+
+# __init__中存放引用包时自动执行的代码
+
+# json格式
+# import json
+# a = {"bob": "kk"}
+# # json字符串
+# s = json.dumps(a)
+# print(type(s))
+# a1 = json.loads(s)
+# print(a1)
+# print(type(a1))
+
+# with open("./course_code_data_file/data", 'a+', encoding="utf-8") as file:
+#     strs = 'wo shi ni'
+#     file.write(strs)
+#     file.seek(0)
+#     data = file.readline()
+# print(data)
