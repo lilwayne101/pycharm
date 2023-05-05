@@ -149,8 +149,97 @@ from matplotlib import pyplot as plt
 # print(c)
 
 # dot
-t1 = torch.tensor([1, 2, 3])
-t2 = torch.tensor([4, 5, 6])
-print(torch.dot(t1, t2))
+# t1 = torch.tensor([1, 2, 3])
+# t2 = torch.tensor([4, 5, 6])
+# print(torch.dot(t1, t2))
+
+# 转置
+# a = torch.arange(1, 5).reshape(2, 2)
+# print(a)
+# print(a.T)
+
+# 连接
+# a = torch.tensor([[1], [2]])
+# b = torch.tensor([[3], [4]])
+# c = torch.cat([a, b], 0) # 按行连接,谁上谁下
+# d = torch.cat([a, b], 1)  # 按列连接,谁左谁右
+# print(c)
+# print(d)
+
+# 压缩
+# x = torch.zeros(2, 1, 2, 1, 2)
+# print(x)
+# print(x.size())
+# print(torch.squeeze(x))
+# print(torch.squeeze(x).size())
+
+# 拆分
+# x = torch.arange(1, 10).reshape(3, 3)
+# print(x)
+# a, b, c = x.split(1, 0)    # 在零维进行间隔为1的拆分
+# print(a)
+# print(b)
+# print(c)
+# a, b, c = x.split(1, 1)    # 在一维进行间隔为1的拆分
+# print(a)
+# print(b)
+# print(c)
+
+# softmax归一化指数：概率
+# index = torch.argmax(torch.tensor([0.1, 0.05, 0.15, 0, 0, 0, 0, 0, 0, 0.7]))
+# print(index)
+# one_hot = torch.zeros(10)
+# one_hot[index] = 1
+# print(one_hot)
+# y = torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+# b = torch.eq(one_hot, y)
+# print(b)
+
+# 伯努利分布
+import random
+# print(random.random() > 0.5)
 
 
+# 大数定律
+# def sumT(count):
+#     k = 0
+#     for i in range(count):
+#         if random.random() > 0.5:
+#             k += 1
+#     print(k / count)
+#
+# sumT(10000)
+
+# 正态分布
+# from scipy import stats
+# mean = 0
+# sd = 1
+# x = np.arange(-10, 10, 0.1)
+# y = stats.norm.pdf(x, mean, sd)
+# plt.plot(x, y)
+# plt.title(f"mu:{mean} -- sd:{sd}")
+# plt.grid()
+# plt.show()
+
+
+# import torch.nn as nn
+#
+# # 交叉熵损失函数(多分类)
+# nn.CrossEntropyLoss()
+# # 二分类交叉熵损失函数
+# nn.BCELoss()
+
+# 信息熵
+# data1 = [0.5, 0.6, 0.7, 1, 0.5]
+# data2 = [0.1, 0.2, 0.3, 0.4, 0.5]
+#
+# def get_cent(data):
+#     sum = 0.
+#     for d in data:
+#         sum -= d * np.log(d)
+#     return sum
+# print(get_cent(data1))
+# print(get_cent(data2))
+
+p = [(0.1, 0.2, 0.3, 0.4), (0.1, 0.6, 0.7, 0.8)]
+ce = np.sum(np.float())

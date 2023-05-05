@@ -854,223 +854,755 @@ import numpy as np
 #     print(stu)
 
 
-class Score:
-    num = 3
-
-    # 初始化对象属性
-    def __init__(self, math, chinese, english):
-        self.math = math
-        self.chinese = chinese
-        self.english = english
-
-    # def __getattr__(self, item):
-    #     return self.class_list[item]
-
-
-class Student:
-
-    # 初始化对象属性
-    def __init__(self, name, age, score: Score):
-        self.name = name
-        self.age = age
-        self.score = score
-
-
-class Students:
-    stu_list = []
-    stu_dict_list = []
-
-    # 添加学生信息
-    def add_stu(self, stu: Student):
-        Students.stu_list.append(Student(stu.name, stu.age, stu.score))
-
-    # 输出学生信息
-    def stus_info(self):
-        stu_dict = {}
-        for index, stu_info in enumerate(Students.stu_list):
-            stu_dict["姓名"] = stu_info.name
-            stu_dict["年龄"] = stu_info.age
-            stu_dict["数学成绩"] = stu_info.score.__dict__["math"]
-            stu_dict["语文成绩"] = stu_info.score.__dict__["chinese"]
-            stu_dict["英语成绩"] = stu_info.score.__dict__["english"]
-            Students.stu_dict_list.append(stu_dict)
-            print(stu_dict)
-        return Students.stu_dict_list
-
-    # 学生列表长度
-    def __len__(self):
-        return len(Students.stu_list)
-
-
-class Operate(Students):
-
-    # 单个学生平均成绩
-    def stu_mean(self):
-        list_stu = []
-        len_temp = Score.num
-        for index, stu_info in enumerate(Students.stu_list):
-            list_stu.append(sum(list(stu_info.score.__dict__.values())) / len_temp)
-            print(f"{stu_info.name}的平均成绩为：{list_stu[index]}")
-        return list_stu
-
-    # 全班学生平均成绩
-    def stus_mean(self):
-        len_temp = len(Students.stu_list)
-        mean = [float(0) for i in range(len_temp)]
-        for index, stu_info in enumerate(Students.stu_list):
-            i = 0
-            for key, value in stu_info.score.__dict__.items():
-                mean[i] += value / len_temp
-                mean[i] = round(mean[i], 2)
-                i += 1
-
-        # print(f"所有学生的数学平均成绩为：{mean[0]}\n所有学生的语文平均成绩为：{mean[1]}\n所有学生的英语平均成绩为：{mean[2]}")
-        return mean
-
-
-student = Students()
-student.add_stu(Student('bob', 19, Score(89, 88, 87)))
-student.add_stu(Student('sunny', 12, Score(86, 98, 86)))
-student.add_stu(Student('jack', 13, Score(90, 76, 53)))
-student.stus_info()
-op = Operate()
-op.stu_mean()
-print(op.stus_mean())
+# class Score:
+#     num = 3
+#
+#     # 初始化对象属性
+#     def __init__(self, math, chinese, english):
+#         self.math = math
+#         self.chinese = chinese
+#         self.english = english
+#
+#     # def __getattr__(self, item):
+#     #     return self.class_list[item]
+#
+#
+# class Student:
+#
+#     # 初始化对象属性
+#     def __init__(self, name, age, score: Score):
+#         self.name = name
+#         self.age = age
+#         self.score = score
+#
+#
+# class Students:
+#     stu_list = []
+#     stu_dict_list = []
+#
+#     # 添加学生信息
+#     def add_stu(self, stu: Student):
+#         Students.stu_list.append(Student(stu.name, stu.age, stu.score))
+#
+#     # 输出学生信息
+#     def stus_info(self):
+#         stu_dict = {}
+#         for index, stu_info in enumerate(Students.stu_list):
+#             stu_dict["姓名"] = stu_info.name
+#             stu_dict["年龄"] = stu_info.age
+#             stu_dict["数学成绩"] = stu_info.score.__dict__["math"]
+#             stu_dict["语文成绩"] = stu_info.score.__dict__["chinese"]
+#             stu_dict["英语成绩"] = stu_info.score.__dict__["english"]
+#             Students.stu_dict_list.append(stu_dict)
+#             print(stu_dict)
+#         return Students.stu_dict_list
+#
+#     # 学生列表长度
+#     def __len__(self):
+#         return len(Students.stu_list)
+#
+#
+# class Operate(Students):
+#
+#     # 单个学生平均成绩
+#     def stu_mean(self):
+#         list_stu = []
+#         len_temp = Score.num
+#         for index, stu_info in enumerate(Students.stu_list):
+#             list_stu.append(sum(list(stu_info.score.__dict__.values())) / len_temp)
+#             print(f"{stu_info.name}的平均成绩为：{list_stu[index]}")
+#         return list_stu
+#
+#     # 全班学生平均成绩
+#     def stus_mean(self):
+#         len_temp = len(Students.stu_list)
+#         mean = [float(0) for i in range(len_temp)]
+#         for index, stu_info in enumerate(Students.stu_list):
+#             i = 0
+#             for key, value in stu_info.score.__dict__.items():
+#                 mean[i] += value / len_temp
+#                 mean[i] = round(mean[i], 2)
+#                 i += 1
+#
+#         # print(f"所有学生的数学平均成绩为：{mean[0]}\n所有学生的语文平均成绩为：{mean[1]}\n所有学生的英语平均成绩为：{mean[2]}")
+#         return mean
+#
+#
+# student = Students()
+# student.add_stu(Student('bob', 19, Score(89, 88, 87)))
+# student.add_stu(Student('sunny', 12, Score(86, 98, 86)))
+# student.add_stu(Student('jack', 13, Score(90, 76, 53)))
+# student.stus_info()
+# op = Operate()
+# op.stu_mean()
+# print(op.stus_mean())
 
 """
     创建一个学校 科目 班级 老师 学生
     求：老师最高工资，平均工资，最低工资，每个老师上的科目，带的班级是什么
     每个学生学的科目是什么老师 平均成绩 最擅长科目
 """
+import json
+# from course_code_package.school import School
+# from course_code_package.teacher import Teacher
+# from course_code_package.student import Student
+# # from course_code_package.subject import Subject
+# from course_code_package.operate import Operate
+# from course_code_package.class_stu import Class
+# from course_code_package.data_read_write import DataReadWrite
+#
+#
+# class_dic_init = {
+#     "一班": [["一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}],
+#              ["一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}]],
+#     '二班': [["二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}],
+#              ["二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}]],
+#     '三班': [["三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}],
+#              ["三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}]],
+#     '四班': [["四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}],
+#              ["四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78}]]
+# }
+#
+# teacher_list_init = {
+#     '1': ['张老师', 4566, "数学", ["一班", '三班']],
+#     '2': ['王老师', 7456, "数学", ["二班", '四班']],
+#     '3': ['赵老师', 9879, "语文", ["一班", '二班']],
+#     '4': ['钱老师', 2345, "语文", ["二班", '四班']],
+#     '5': ['孙老师', 5675, "英语", ["一班", '二班']],
+#     '6': ['李老师', 10933, "英语", ["二班", '四班']],
+# }
+#
+# student_list_init = {
+#     '1': ["一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}],
+#     '2': ["一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}],
+#     '3': ["二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}],
+#     '4': ["二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}],
+#     '5': ["三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}],
+#     '6': ["三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}],
+#     '7': ["四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}],
+#     '8': ["四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78}]
+# }
+#
+# # 写数据
+# path_temp = r"./course_code_data_file"
+# data_r_w = DataReadWrite()
+# # data_r_w.data_write(teacher_list, path_temp + '//' + 'teacher_data')
+# # data_r_w.data_write(student_list, path_temp + '//' + 'student_data')
+# # data_r_w.data_write(class_dic, path_temp + '//' + 'class_data')
+#
+# # 读数据
+# t = data_r_w.data_read(path_temp + '//' + 'teacher_data')
+# teacher_list_temp = [t[str(i)] for i in range(1, len(t) + 1)]
+# s = data_r_w.data_read(path_temp + '//' + 'student_data')
+# student_list_temp = [s[str(i)] for i in range(1, len(s) + 1)]
+# class_list = data_r_w.data_read(path_temp + '//' + 'class_data')
+#
+# # print(class_list)
+# # 创建对象
+# op = Operate()
+# class_list = op.create_class_list(class_list)
+# print(class_list)
+# student_list = op.create_student_list(student_list_temp)
+# print(student_list)
+# teacher_list = op.create_teacher_list(teacher_list_temp)
+# print(teacher_list)
+#
+# print(op.max_salary(teacher_list))
+# print(op.min_salary(teacher_list))
+# print(op.mean_salary(teacher_list))
+# op.show_teacher(teacher_list)
+# op.stu_teacher(student_list, teacher_list)
+# op.mean_score_stu(student_list)
+# op.good_at_sub(student_list)
 
 
-class School:
-    def __init__(self, school_name):
-        self.sn = school_name
-    pass
+# 常用的魔法方法
+# __dict__ 字典化对象属性
+# class Abc:
+#     list1 = []
+#     b = 12
+#
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.age = age
+#         self.data = {}
+#
+#
+#     # 调用不存在的属性时自动调用
+#     def __getattr__(self, item):
+#         return print(f"不存在{item}")
+#         pass
+#
+#     # 定义一次对象成员时 自动调用一次
+#     def __setattr__(self, key, value):
+#         print("调用setattr")
+#         self.__dict__[key] = value
+#
+#     # 将实例对象以列表形式调用时自动调用
+#     def __getitem__(self, item):
+#         print(item)
+#
+#     # 将对象以列表形式赋值(字典赋值)时自动调用
+#     # 类似
+#     def __setitem__(self, key, value):
+#         print("调用setitem")
+#         self.__dict__[key] = value
+#
+#
+# a = Abc('BOB', 12)
+# # print(Abc[2])
+# a['jab'] = 'mouse'
+# # print(a['jab'])
+
+# print(a.list1)
+# #
+# print(a.__dict__)
+# print(len(a.__dict__))
+# print(Abc.__dict__)
+# print(len(Abc.__dict__))
+# # 示例化的对象是一个拥有类属性的独立对象
+# print(a.b)
+# a.b = 100
+# # 示例化的对象可以对自己拥有的原来的类属性进行修改
+# print(a.b)
+# # 示例化的对象对无法类的属性进行修改
+# print(Abc.b)
+# Abc.b = 1000
+# print(Abc.b)
 
 
-class Class:
-    def __init__(self, class_name, students_list):
-        self.stu_list = students_list
-        self.name = class_name
+# 常量
+# ABC_CORE = 111
 
-    pass
+# 引入模块
+# import 模块名
+
+# 引入模块中的类并改名
+# from 模块名 import 类名 as 新类名
+
+# __init__中存放引用包时自动执行的代码
+
+# json格式
+# import json
+# a = {"bob": "kk"}
+# # json字符串
+# s = json.dumps(a)
+# print(type(s))
+# a1 = json.loads(s)
+# print(a1)
+# print(type(a1))
+
+# with open("./course_code_data_file/data", 'a+', encoding="utf-8") as file:
+#     strs = 'wo shi ni'
+#     file.write(strs)
+#     file.seek(0)
+#     data = file.readline()
+# print(data)
+
+# eval()将字符串转换为代码运行并返回运行的结果
+# def f(q):
+#     print(q)
+#
+#
+# b = 'f'
+# a = f'f(55)'
+# eval(a)
+
+# class Stu:
+#     # 类属性 每个实例化对象都有 且初始值相同 要求对所有对象同时进行操作时则定义成类属性
+#     class_stu = "一年级"
+#
+#     def __init__(self, name):
+#         # 对象成员
+#         self.name = name
+#
+#     def __call__(self, *args, **kwargs):
+#         self.id = '101'
+#         return self
+#
+#     # 静态方法不用传对象self
+#     @staticmethod
+#     def test1():
+#         print("调用test1静态方法")
+#
+#     # 类方法可以调用类中其他的方法
+#     @classmethod
+#     def test2(cls):
+#         print(f"{cls.class_stu}")
+#         cls.test1()
+#         Stu.test1()
+#         print("调用test2类方法")
+#
+#
+# stu = Stu('Bob')
+# stu.test1()
+# stu.test2()
+
+# class Goods:
+#     def __init__(self, title, price, num):
+#         self.title = title
+#         self.price = price
+#         self.num = num
+#
+#     def sell(self):
+#         pass
+#
+# class Shoes(Goods):
+#     def __init__(self, title, price, num, size):
+#         super().__init__(title, price, num)
+#         self.size = size
+#
+#     def sell(self):
+#         print("")
+
+"""
+要求:
+
+1. 定义基类Person,表示人,有姓名、年龄等属性。
+
+2. 定义Customer类继承Person,表示顾客,有购物车属性,以及购物相关方法。
+
+3. 定义Cashier类继承Person,表示收银员,有收银台属性,以及结账方法。 
+
+4. 定义Goods作为商品类别树的根节点。有Food、Appliance等子类别。每个类别都有价格、库存等属性,以及出售方法。
+
+5. 定义Order类,表示订单,有下单时间、送货时间、订单状态以及包含的商品列表属性。与顾客和配送员关联。
+
+6. 定义Courier类继承Person,表示配送员,有送货清单和送货时间属性,以及送货方法。
+
+7. Mall类包含人员列表、商品类别树、订单列表,以及添加商品类别、添加人员、生成订单、配送订单等方法。
+
+8. 系统支持添加商品类别、人员和商品。删除时需要级联更新相关信息。
+
+9. 选购商品时可以在所有子类别中选择。结账时生成订单,送货前标记为“未送货”,送货后“已送货”,
+"""
 
 
-class Subject:
-    def __init__(self, math, chinese, english):
-        self.math = math
-        self.cne = chinese
-        self.eng = english
-    pass
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
-    def __getattr__(self, item):
+
+class Goods:
+    def __init__(self, name, price, num_stock):
+        self.name = name
+        self.price = price
+        self.num_stock = num_stock
+        self.type = 'others'
+
+    def sell(self):
+        self.num_stock -= 1
+
+
+class Food(Goods):
+    def __init__(self, name, price, num_stock):
+        super().__init__(name, price, num_stock)
+        self.type = 'food'
+
+
+class Appliance(Goods):
+    def __init__(self, name, price, num_stock):
+        super().__init__(name, price, num_stock)
+        self.type = 'appliance'
+
+
+class Customer(Person):
+    def __init__(self, name, age, shopping_cart: list):
+        super().__init__(name, age)
+        self.shopping_cart = shopping_cart
+
+    def shopping(self, goods: Goods):
+        self.shopping_cart.append(goods)
+        return print(f"已将{goods}添加至{self.name}的购物车")
+
+
+class Cashier(Person):
+    def __init__(self, name, age, checkout_counter):
+        super().__init__(name, age)
+        self.checkout_counter = checkout_counter
+        self.count = 0
+
+    def bill(self, customer: Customer):
+        i = 0
+        print(f"顾客：{customer.name}")
+        for goods in customer.shopping_cart:
+            i += 1
+            print(f"{i}:{goods.name}----{goods.price}元")
+            self.count += goods.price
+        print(f"共计：{self.count}元")
+
+
+class Courier(Person):
+    def __init__(self, delivery_order, delivery_time, name, age):
+        super().__init__(name, age)
+        self.delivery_order = delivery_order
+        self.delivery_time = delivery_time
+        self.status = "未发货"
+
+    def delivery(self, goods):
+        self.status = "已发货"
+        print(f"{goods}：{self.status}")
+
+
+class Order:
+    def __init__(self, order_time, delivery_time, order_status, order_goods_list):
+        self.order_time = order_time
+        self.delivery_time = delivery_time
+        self.order_status = order_status
+        self.order_goods_list = order_goods_list
+
+    def read_order_data(self, path):
+        with open(path, "r", encoding="utf-8") as data_order:
+            data_order = json.loads(data_order.read())
+        return data_order
+
+    def create_order_list(self, order_data):
+        order_list = []
+        for index, order in order_data.items():
+            order_list.append(Order(order["order_time"], order["delivery_time"],
+                                    order["order_status"], order["order_goods_list"]))
+        return order_list
+
+    def connection(self, courier: Courier):
+        print(f"{courier.status}")
+
+class Mall:
+    def __init__(self, personnel_dic, commodity_category_dic, order_list):
+        self.personnel_dic = personnel_dic
+        self.commodity_category_dic = commodity_category_dic
+        self.order_list = order_list
+
+    def add_commodity_cate(self, goods):
+        self.commodity_category_dic[goods.type].append(goods)
+        return self.commodity_category_dic
+
+    def add_person(self, person):
+        self.personnel_dic[person.__name__].append()
+        return self.personnel_dic
+
+    def product_order(self):
+        pass
+
+    def shipping_order(self):
         pass
 
 
-class Teacher:
-    def __init__(self, teacher_name, salary, teach_subject, class_t_list):
-        self.name = teacher_name
-        self.salary = salary
-        self.t_sub = teach_subject
-        self.c_list = class_t_list
-    pass
+# python 操作文件夹的方法和规则
+import os
+
+# os.listdir()列出文件夹中的文件和子文件
+path = r"/course_code_package"
+# folder_list = os.listdir(path)
+# print(folder_list)
+
+# os.mkdir()创建文件 创建在当前文件目录下
+# os.mkdir("test")
+
+# os.makedirs()创建多层文件夹
+# os.makedirs("path/to/somedir")
+
+# os.rmdir()删除空文件夹
+# os.rmdir("path")
+
+# os.rename(old, new) 重命名/移动 文件夹 (注意：)路径名
+# os.rename('test', 'test1')
+
+# os.rename("test", r"./course_code_package/tws3")
+
+# shutil.rmtree()删除非空文件夹
+# import shutil
+# shutil.rmtree("./course_code_package/tws3")
+
+# os.chdir()改变当前工作目录
+# os.chdir("course_code_package")
+# print(os.getcwd())
+# os.chdir("../")
+# print(os.getcwd())
+
+# os.path.isabs()检查是否是绝对路径
+# print(os.path.isabs("python_pycharm/Day_14"))
+# print(os.path.isabs("/python_pycharm/Day_14"))
+
+# os.path.exists(path) 检查路径是否存在
+# print(os.path.exists(path))
+
+# os.path.getsize(file) 获取文件大小
+# print(os.path.getsize("./course_code_package/class_stu.py"))
+
+# 返回路径的基名称 os.path.basename(path)
+# print(os.path.basename("./course_code_package/class_stu.py"))
+
+# os.path.dirname(path):返回路径的目录名称
+# print(os.path.dirname(path))
+
+# os.path.join(path1, path2, ...) 将多个路径拼接成完整路径
+# path1 = 'class_stu.py'
+# print(os.path.join(path, path1))
+
+# 返回绝对路径
+# print(os.path.abspath("practice.py"))
+
+# 一个进程里面可以包含多个线程
+# 根本目的是提高工作效率
+
+import time
+import threading
+# def test(a, b):
+#     while True:
+#         # print(a, b)
+#         print(threading.current_thread())
+#         print(time.time())
+#         time.sleep(1)
+# def test2(a, b):
+#     while True:
+#         # print(a, b)
+#         time.sleep(1)
+#
+# th1 = threading.Thread(target=test, args=("Theard_test", 1), name="thread-1")
+# th1.start()
+# # print(threading.current_thread().name)
+# th2 = threading.Thread(target=test, args=("Theard_test", 2), name="thread-2")
+# th2.start()
+# print(threading.current_thread().name)
+
+# 多线程并行和锁
+# current_thread = 1
+#
+#
+# class th(threading.Thread):
+#
+#     def __init__(self):
+#         super().__init__()
+#         self.run1 = threading.Thread(target=self.run1)
+#         self.condition1 = threading.Condition()
+#         self.run2 = threading.Thread(target=self.run2)
+#         self.condition2 = threading.Condition()
+#         self.run3 = threading.Thread(target=self.run3)
+#         self.condition3 = threading.Condition()
+#
+#     def run(self):
+#         self.run1.start()
+#         self.run2.start()
+#         self.run3.start()
+#         self.run1.join()
+#         self.run2.join()
+#         self.run3.join()
+#
+#     def run1(self):
+#         global current_thread
+#         with self.condition1:
+#             while current_thread != 1:
+#                 self.condition1.wait()
+#             for i in range(20):
+#                 print("run1")
+#                 time.sleep(0.1)
+#             current_thread += 1
+#             self.condition1.notify()
+#
+#     def run2(self):
+#         global current_thread
+#         with self.condition2:
+#             while current_thread != 2:
+#                 self.condition2.wait()
+#             for i in range(20):
+#                 print("run2")
+#                 time.sleep(0.1)
+#             current_thread += 1
+#             self.condition2.notify()
+#
+#     def run3(self):
+#         global current_thread
+#         with self.condition3:
+#             while current_thread != 3:
+#                 self.condition3.wait()
+#             for i in range(20):
+#                 print("run3")
+#                 time.sleep(0.1)
+#             current_thread += 1
+#             self.condition3.notify()
+#
+# th().start()
+
+# def display(count):
+#     for i in range(1, count + 1):
+#         print(i, end="")
+#         time.sleep(1)
 
 
-class Student:
-    def __init__(self, stu_class, stu_name, sex, subject_score: dict):
-        self.stu_class = stu_class
-        self.name = stu_name
-        self.sex = sex
-        self.sub_score = subject_score
-    pass
+# 异常
+# a = [1]
+#
+# try:
+#     print(a[0])
+# except Exception as e:
+#     print(e)
+# else:
+#     print("test successfully")
+# finally:
+#     print("test over")
+
+# 作业
+# 初始化50个商品
+from threading import Timer
+
+# lock = threading.RLock()
+# lock1 = threading.RLock()
+# lock2 = threading.RLock()
+#
+#
+# def is_jason(string):
+#     try:
+#         json.loads(string)
+#         return True
+#     except:
+#         return False
+#
+#
+# path = os.path.join(os.getcwd(), 'test.txt')
+#
+#
+# class Goods:
+#     total_dic = {"商品数量": 50}
+#
+#     @classmethod
+#     def write_file_goods(cls, path):
+#         if not os.path.exists(path):
+#             return "文件路径不存在"
+#         lock2.acquire()
+#         with open(path, 'w', encoding='utf-8') as w_file:
+#             data = json.dumps(cls.total_dic)
+#             w_file.write(data)
+#         lock2.release()
+#
+#     @classmethod
+#     def read_file_goods(cls, path):
+#         if not os.path.exists(path):
+#             return "文件路径不存在"
+#         with open(path, 'r', encoding='utf-8') as w_file:
+#             w_file.seek(0)
+#             lock2.acquire()
+#             data = w_file.read()
+#             if not is_jason(data):
+#                 print(data)
+#                 print("读取到非json内容")
+#             data = json.loads(data)
+#             lock2.release()
+#             return data
+#
+#
+# class Add(threading.Thread):
+#
+#     def __init__(self):
+#         super().__init__()
+#         # 添加商品的线程
+#         self.add_thread = threading.Thread(target=self.run)
+#
+#     def run(self):
+#         lock2.acquire()
+#         i = 0
+#         while i < 100:
+#             random.seed()
+#             dic_read = Goods.read_file_goods(path)
+#             num = random.randint(1, 10)
+#             try:
+#                 total_dic = {"商品数量": num + int(dic_read["商品数量"])}
+#             except Exception as e:
+#                 print(e)
+#             else:
+#                 total_dic = {"商品数量": num + int(dic_read["商品数量"])}
+#             print(f"新到货{num}件,目前库存{total_dic['商品数量']}件,大家快来买啊！")
+#             Goods.write_file_goods(path)
+#             time.sleep(1)
+#             i += 1
+#         lock2.release()
+#
+#
+# class Sell_goods(threading.Thread):
+#     def __init__(self):
+#         super().__init__()
+#         self.sell_thread1 = threading.Thread(target=self.sell_goods, name="一号店铺")
+#         self.sell_thread2 = threading.Thread(target=self.sell_goods, name="二号店铺")
+#         time.sleep(2)
+#
+#     def sell_goods(self):
+#         i = 0
+#         while i < 100:
+#             lock.acquire()
+#             data = Goods.read_file_goods(path)
+#             time.sleep(1)
+#             random.seed()
+#             buy_nums = random.randint(1, 10)
+#             print(f"有人在{threading.currentThread().name}购买{buy_nums}件商品")
+#             lock.release()
+#             if (data["商品数量"] - buy_nums) < 0:
+#                 print("库存不足,请重新购买")
+#                 continue
+#             lock.acquire()
+#             data['商品数量'] -= buy_nums
+#             print(f"购买成功，库存余量{data['商品数量']}")
+#             Goods.total_dic['商品数量'] = data['商品数量']
+#             Goods.write_file_goods(path)
+#             lock.release()
+#             i += 1
+#         print(f"{threading.currentThread().name}卖完咯")
 
 
-class Operate:
+#     def run(self):
+#         self.sell_thread1.start()
+#         self.sell_thread2.start()
 
-    def max_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return max(salary_list)
+# good = Goods()
+# good.write_file_goods(path)
+# good.read_file_goods(path)
+# sell = Sell_goods()
+# sell.start()
+# add = Add()
+# add.start()
 
-    def mean_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return sum(salary_list) / len(salary_list)
+"""
+需求：
+1.商品的创建
+2.库房数据的读写
+3.添加商品入库
+4.用户类，用户购买商品出库
+5.创建同步器
+6.给用户和库房设计余额，
+库房添加商品需要扣除钱，
+用户购买需要扣除钱，
+用户不定时增加不定额的钱
+"""
 
-    def min_salary(self, teacher_list):
-        salary_list = [teacher_list[i].salary for i in range(len(teacher_list))]
-        return min(salary_list)
+from goods_stock import Goods
+from file import File
+from users import User
 
-    def show_teacher(self, teacher_list):
-        for teacher in teacher_list:
-            print(f"\n{teacher.name}教:", end='')
-            for sub in teacher.t_sub:
-                print(f"{sub}", end='\t')
-            print(f"\n{teacher.name}带:", end='')
-            for c in teacher.c_list:
-                print(f"{c}", end='\t')
-
-    def stu_teacher(self, student_list, teacher_list):
-        print()
-        for stu in student_list:
-            for sub in list(stu.sub_score.keys()):
-                for thr in teacher_list:
-                    if sub == thr.t_sub and stu.stu_class in thr.c_list:
-                        print(f"{stu.name}的{sub}科目的老师为{thr.name}")
-
-    def mean_score_stu(self, student_list):
-        for stu in student_list:
-            score_list = list(stu.sub_score.values())
-            print(f"{stu.name}的平均分为{round(sum(score_list) / len(stu.sub_score), 2)}")
-
-    def good_at_sub(self, student_list):
-        for stu in student_list:
-            score_list = list(stu.sub_score.values())
-            index = score_list.index(max(score_list))
-            sub = list(stu.sub_score.keys())[index]
-            print(f"{stu.name}最擅长的科目是：{sub}")
-
-# class (self, class_name, students_list):
-# teacher (self, teacher_name, salary, teach_subject, class_t_list):
-# student (self, stu_class, stu_name, sex, subject_score: dict):
+goods = Goods()
+goods.create_goods_stock()
+goods.show_goods_stock()
+file = File()
+user = User()
 
 
-school = School("成都中学")
-class_list = [
-    Class('一班', [Student("一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}),
-                   Student("一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70})]),
-    Class('二班', [Student("二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}),
-                   Student("二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98})]),
-    Class('三班', [Student("三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}),
-                   Student("三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88})]),
-    Class('四班', [Student("四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}),
-                   Student("四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78})]),
-]
-teacher_list = [
-    Teacher('张老师', 4566, "数学", ["一班", '三班']),
-    Teacher('王老师', 7456, "数学", ["二班", '四班']),
-    Teacher('赵老师', 9879, "语文", ["一班", '二班']),
-    Teacher('钱老师', 2345, "语文", ["二班", '四班']),
-    Teacher('孙老师', 5675, "英语", ["一班", '二班']),
-    Teacher('李老师', 10933, "英语", ["二班", '四班']),
-]
-student_list = [
-    Student("一班", '小王', '男', {"数学": 89, "语文": 88, "英语": 90}),
-    Student("一班", '小周', '男', {"数学": 79, "语文": 78, "英语": 70}),
-    Student("二班", '小李', '男', {"数学": 87, "语文": 98, "英语": 98}),
-    Student("二班", '小朱', '女', {"数学": 99, "语文": 90, "英语": 98}),
-    Student("三班", '小马', '男', {"数学": 67, "语文": 78, "英语": 88}),
-    Student("三班", '小赵', '女', {"数学": 69, "语文": 80, "英语": 88}),
-    Student("四班", '小刘', '男', {"数学": 68, "语文": 98, "英语": 78}),
-    Student("四班", '小孙', '女', {"数学": 99, "语文": 66, "英语": 78})
-]
-op = Operate()
-op.max_salary(teacher_list)
-op.min_salary(teacher_list)
-op.mean_salary(teacher_list)
-op.show_teacher(teacher_list)
-op.stu_teacher(student_list, teacher_list)
-op.mean_score_stu(student_list)
-op.good_at_sub(student_list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
