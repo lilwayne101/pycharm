@@ -3,6 +3,8 @@ import random
 from filecmp import cmp
 import os
 
+
+import cv2
 import numpy as np
 
 # 直接赋值
@@ -1573,33 +1575,79 @@ from threading import Timer
 用户不定时增加不定额的钱
 """
 
-from goods_stock import Goods
-from file import File
-from users import User
+# from goods_stock import Goods
+# from file import File
+# from users import User
+#
+# goods = Goods()
+# goods.create_goods_stock()
+# goods.show_goods_stock()
+# file = File()
+# user = User()
 
-goods = Goods()
-goods.create_goods_stock()
-goods.show_goods_stock()
-file = File()
-user = User()
+# a = []
+# for i in range(100000000):
+#     a.append(random.random())
+# t1 = time.time()
+# s = sum(a)
+# t2 = time.time()
+# print(t2 - t1)
+#
+# b = np.array(a)
+# t3 = time.time()
+# s1 = np.sum(b)
+# t4 = time.time()
+# print(t4 - t3)
+
+# 三维运算符
+# a = np.array([0 if i % 2 else 1 for i in range(10)])
+# print(a)
+# # 查看数据结构
+# print(a.shape)
+# # 维度
+# print(a.ndim)
+# # 元素的数量
+# print(a.size)
+# # 元素的数据类型
+# print(a.dtype)
+
+# print(np.random.normal(0, 2, (3, 3)))
+l = []
+for times in range(4):
+    l.append([i % 2 for i in range(8)])
+    l.append([i % 2 for i in range(1, 9)])
+a = np.array(l)
+
+h, w = a.shape
+board = np.full(shape=[800, 800, 3], fill_value=(0, 0, 0), dtype=np.uint8)
+for i in range(h):
+    for j in range(w):
+        if a[i][j] != 0:
+            board[i * 100:i * 100 + 100, j * 100:j * 100 + 100] = (255, 255, 255)
+
+img = cv2.imread("./back.png")
+print(img.shape)
+min_dim = np.min(img.shape[:2])
+max_dim = np.max(img.shape[:2])
+sub_dim = max_dim - min_dim
+img = img[sub_dim:-sub_dim, int(sub_dim / 2):-sub_dim]
+w, h, c = img.shape
+background = np.full(shape=(w * 2, h * 2, c), fill_value=(0, 0, 0), dtype=np.uint8)
+print(background.shape)
+for i in range(2):
+    for j in range(2):
+        background[w*i:w*(i+1), h*j:h*(j+1)] = img
+
+cv2.imshow("test", background)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# board = np.full(shape=[800, 800, 3], fill_value=(255, 0, 255), dtype=np.uint8)
+# print(board)
 
 
 

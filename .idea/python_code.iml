@@ -5,5 +5,6 @@
     <orderEntry type="jdk" jdkName="py39" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Day_10" />
+    <orderEntry type="module" module-name="Day_14" />
   </component>
 </module>

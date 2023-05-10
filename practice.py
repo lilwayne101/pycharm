@@ -222,7 +222,7 @@ import random
 # plt.show()
 
 
-# import torch.nn as nn
+import torch.nn as nn
 #
 # # 交叉熵损失函数(多分类)
 # nn.CrossEntropyLoss()
@@ -241,5 +241,24 @@ import random
 # print(get_cent(data1))
 # print(get_cent(data2))
 
-p = [(0.1, 0.2, 0.3, 0.4), (0.1, 0.6, 0.7, 0.8)]
-ce = np.sum(np.float())
+# p = [(0.1, 0.2, 0.3, 0.4), (0.1, 0.6, 0.7, 0.8)]
+# ce = np.sum(np.float())
+
+def per(w, x, b):
+    w = np.array(w)
+    x = np.array(x)
+    return np.sum(w * x) + b
+
+
+x = [120, 130, 150, 180, 200]
+x1 = np.array([120, 130, 150, 180, 200])
+x1 = (x1 / 255) - 0.5
+w = [0.1, 0.15, 0.12, 0.05, 0.08]
+b = 0.05
+h1 = per(w, x, b)
+h = per(w, x1, b)
+print(h1)
+print(h)
+print((h + 0.5) * 255)
+h = nn.Sigmoid()(torch.tensor(h))
+print(h)
