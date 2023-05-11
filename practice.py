@@ -244,21 +244,70 @@ import torch.nn as nn
 # p = [(0.1, 0.2, 0.3, 0.4), (0.1, 0.6, 0.7, 0.8)]
 # ce = np.sum(np.float())
 
-def per(w, x, b):
-    w = np.array(w)
-    x = np.array(x)
-    return np.sum(w * x) + b
+
+# def per(w, x, b):
+#     w = np.array(w)
+#     x = np.array(x)
+#     return np.sum(w * x) + b
 
 
-x = [120, 130, 150, 180, 200]
-x1 = np.array([120, 130, 150, 180, 200])
-x1 = (x1 / 255) - 0.5
-w = [0.1, 0.15, 0.12, 0.05, 0.08]
-b = 0.05
-h1 = per(w, x, b)
-h = per(w, x1, b)
-print(h1)
-print(h)
-print((h + 0.5) * 255)
-h = nn.Sigmoid()(torch.tensor(h))
-print(h)
+# 感知机
+# x = [120, 130, 150, 180, 200]
+# x1 = np.array([120, 130, 150, 180, 200])
+# x1 = (x1 / 255) - 0.5
+# w = [0.1, 0.15, 0.12, 0.05, 0.08]
+# b = 0.05
+# h1 = per(w, x, b)
+# h = per(w, x1, b)
+# # print(h1)
+# # print(h)
+# print((h + 0.5) * 255)
+# h = nn.Softmax(dim =0)(torch.tensor(h))
+# print(h)
+
+# print(np.hstack(([1, 2, 3], [4, 5, 6])))
+# print(np.hstack((1, 4)))
+# print(np.hsplit(np.array([1, 2, 3, 4]), 2))
+
+# one-hot编码
+# index = [1, 2, 3, 4, 5, 7, 7, 5, 3]
+# one_hots = np.eye(10)[index]
+# print(one_hots)
+
+# a = torch.randn(3, 5)
+# b = torch.randn(3, 5)
+# print(torch.nn.MSELoss()(a, b))
+# print(torch.nn.functional.mse_loss(a, b))
+# # print(torch.mean((a - b) ** 2))
+
+# # 多分类交叉熵，自带Softmax输出函数
+# torch.nn.CrossEntropyLoss()
+# # 多分类交叉熵，不带输出函数，需要用Softmax()激活
+# torch.nn.NLLLoss()
+#
+# # 二分类交叉熵，自带Sigmoid输出函数
+# torch.nn.BCEWithLogitsLoss()
+# # 不带激活函数
+# torch.nn.BCELoss()
+
+# 继承神经网络基类
+class Net(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # 神经网络序列构造器
+        nn.Sequential(
+            # 构造神经网络的第一层
+            nn.Linear(3 * 274 * 360, 1024),
+            nn.Linear(1024, 512),
+            nn.Linear(512, 256),
+            nn.Linear(1024, 512),
+            nn.Linear(1024, 512),
+            nn.Linear(1024, 512),
+            nn.Linear(1024, 512),
+            nn.Linear(1024, 512),
+            nn.Linear(1024, 512),
+
+
+        )
+
+

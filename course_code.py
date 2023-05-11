@@ -1612,45 +1612,104 @@ from threading import Timer
 # print(a.dtype)
 
 # print(np.random.normal(0, 2, (3, 3)))
-l = []
-for times in range(4):
-    l.append([i % 2 for i in range(8)])
-    l.append([i % 2 for i in range(1, 9)])
-a = np.array(l)
-
-h, w = a.shape
-board = np.full(shape=[800, 800, 3], fill_value=(0, 0, 0), dtype=np.uint8)
-for i in range(h):
-    for j in range(w):
-        if a[i][j] != 0:
-            board[i * 100:i * 100 + 100, j * 100:j * 100 + 100] = (255, 255, 255)
-
-img = cv2.imread("./back.png")
-print(img.shape)
-min_dim = np.min(img.shape[:2])
-max_dim = np.max(img.shape[:2])
-sub_dim = max_dim - min_dim
-img = img[sub_dim:-sub_dim, int(sub_dim / 2):-sub_dim]
-w, h, c = img.shape
-background = np.full(shape=(w * 2, h * 2, c), fill_value=(0, 0, 0), dtype=np.uint8)
-print(background.shape)
-for i in range(2):
-    for j in range(2):
-        background[w*i:w*(i+1), h*j:h*(j+1)] = img
-
-cv2.imshow("test", background)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-
-
+# l = []
+# for times in range(4):
+#     l.append([i % 2 for i in range(8)])
+#     l.append([i % 2 for i in range(1, 9)])
+# a = np.array(l)
+#
+# h, w = a.shape
+# board = np.full(shape=[800, 800, 3], fill_value=(0, 0, 0), dtype=np.uint8)
+# for i in range(h):
+#     for j in range(w):
+#         if a[i][j] != 0:
+#             board[i * 100:i * 100 + 100, j * 100:j * 100 + 100] = (255, 255, 255)
+#
+# img = cv2.imread("./back.png")
+# # print(img.shape)
+# min_dim = np.min(img.shape[:2])
+# max_dim = np.max(img.shape[:2])
+# sub_dim = max_dim - min_dim
+# img = img[sub_dim:-sub_dim, int(sub_dim / 2):-sub_dim]
+# w, h, c = img.shape
+# background = np.full(shape=(w * 2, h * 2, c), fill_value=(0, 0, 0), dtype=np.uint8)
+# # print(background.shape)
+# for i in range(2):
+#     for j in range(2):
+#         background[w*i:w*(i+1), h*j:h*(j+1)] = img
+# print(board.shape)
+# cv2.imshow("test", board)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
 
 # board = np.full(shape=[800, 800, 3], fill_value=(255, 0, 255), dtype=np.uint8)
 # print(board)
 
 
+# a = np.array(range(2*3*4)).reshape(2, 3, 4)
+# print(a)
+# # 零轴 = shape[0]
+# # 1轴 = shape[1]
+# b = np.sum(a, axis=0)
+# print("------------")
+# # 0，1，2...对应最左边的[[[...
+# print(b)
+# # 沿某个轴，就是将该轴压缩掉
+# print(b.shape)
 
+def board():
+    l = []
+    for times in range(4):
+        l.append([i % 2 for i in range(8)])
+        l.append([i % 2 for i in range(1, 9)])
+    a = np.array(l)
 
+    h, w = a.shape
+    board = np.full(shape=[800, 800, 3], fill_value=(0, 0, 0), dtype=np.uint8)
+    for i in range(h):
+        for j in range(w):
+            if a[i][j] != 0:
+                board[i * 100:i * 100 + 100, j * 100:j * 100 + 100] = (255, 255, 255)
 
+    img = cv2.imread("back.png")
+    dim = min(img.shape[0], img.shape[1])
+    img = img[-dim:, :]
+    img = img[::2, ::2]
+    img_re = img[::-1, ::-1]
+    img_left = img[::1, ::-1]
+    w, h, c = img.shape
+    img_b = np.zeros((w, h, c), dtype=np.uint8)
+    re_img_b = copy.deepcopy(img_b)
+    img_g = np.zeros((w, h, c), dtype=np.uint8)
+    re_img_g = copy.deepcopy(img_g)
+    img_r = np.zeros((w, h, c), dtype=np.uint8)
+    re_img_r = copy.deepcopy(img_r)
+    img_b[:, :, 0] = img[:, :, 1]
+    img_g[:, :, 1] = img[:, :, 0]
+    img_r[:, :, 2] = img[:, :, 2]
+    re_img_b[:, :, :] = img_b[::-1, ::-1, :]
+    re_img_g[:, :, :] = img_g[::-1, ::-1, :]
+    re_img_r[:, :, :] = img_r[::-1, ::-1, :]
+    list_img = [img, img_b, re_img_b, img_g, re_img_g, re_img_r, img_r, img_left, img_re]
+    long = len(list_img)
+    img_new = np.zeros((w * 5, h * 5, c), dtype=np.uint8)
+    for i in range(5):
+        for j in range(5):
+            img_new[i * w:(i + 1) * w, j * h:(j + 1) * h, :] = list_img[random.randint(0, long - 1)][:, :, :]
+    w1, h1, c = board.shape
+    sub_w = w * 5 - w1
+    sub_h = h * 5 - h1
+    # img_new[int(sub_w / 2): -int(sub_w / 2), int(sub_h / 2):- int(sub_h / 2), :] = board[:, :, :]
+    img_new = np.add(img_new, board)
+    print(img_new.shape)
+    cv2.imshow("img", img_new)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
+board()
+
+# img1 = np.zeros_like(img)
+# np.stack()
+# img.transpose((1, 0, 2))
+# np.concatenate(img, img_b)
