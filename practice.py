@@ -291,23 +291,68 @@ import torch.nn as nn
 # torch.nn.BCELoss()
 
 # 继承神经网络基类
-class Net(nn.Module):
+# class Net(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         # 神经网络序列构造器
+#         self.layer = nn.Sequential(
+#             # 构造神经网络的每一层
+#             # (128, 3 * 274 * 360) -->(128, 1024)
+#             nn.Linear(in_features=3 * 274 * 360, out_features=1024, bias=False),
+#             # (128, 1024) -->(128, 512)
+#             nn.Linear(1024, 512),  # 特征压缩()
+#             nn.Linear(512, 256),
+#             nn.Linear(256, 128),
+#             nn.Linear(128, 64),
+#             # (128, 64)-->(128, 2)
+#             nn.Linear(64, 2),
+#             # 2 分类，输出函数，NV结构
+#             # (128, 2)-->(128, 2)
+#             # nn.Softmax(dim=1)
+#             nn.Sigmoid()
+# )
+#     # 前向计算(FP)
+#     # x：输入网络的数据
+#     def forward(self,x):
+#         return self.layer(x)
+#
+#
+# if __name__ == "__main__":
+#     net = Net()
+#     print(net)
+#     # NV结构
+#     data = torch.randn(10, 3 * 274 * 360)
+#     h = net.forward(data)
+#     # torch.Size([10, 2])
+#     print(h.shape)
+#     print(h)
+
+class Mynet(nn.Module):
     def __init__(self):
         super().__init__()
-        # 神经网络序列构造器
-        nn.Sequential(
-            # 构造神经网络的第一层
-            nn.Linear(3 * 274 * 360, 1024),
-            nn.Linear(1024, 512),
-            nn.Linear(512, 256),
-            nn.Linear(1024, 512),
-            nn.Linear(1024, 512),
-            nn.Linear(1024, 512),
-            nn.Linear(1024, 512),
-            nn.Linear(1024, 512),
-            nn.Linear(1024, 512),
+        # mnist数据集(1*28*28)
+        self.fc_layer1 = nn.Linear(784, 128)
+        self.relu1 = nn.ReLU()
+        self.fc_layer2 = nn.Linear(128, 64)
+        self.relu2 = nn.ReLU()
+        self.fc_layer3 = nn.Linear(64, 2)
+        self.softmax = nn.Softmax(dim=1)
+
+    def forward(self, x):
+       x = self.fc_layer1(x)
+       x = self.relu1(x)
+       x = self.fc_layer2(x)
+       x = self.relu2(x)
+       x = self.fc_layer3(x)
+       return self.softmax(x)
 
 
-        )
+if __name__ == "__main__":
+    net = Mynet()
+    data = torch.randn(10, 784)
+    h = net.forward(data)
+    print(h.shape)
+    # print(net)
+    print(h)
 
 

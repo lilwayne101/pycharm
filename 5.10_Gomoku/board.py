@@ -24,7 +24,7 @@ class Board:
     @classmethod
     def create_board_plus(cls, w=1000, h=1000):
         cls.board = cv2.imread("back.png")
-        cls.board = cls.board[:, :, :] * 0.7
+        cls.board = cls.board[:, :, :]
         cls.board = cv2.resize(cls.board, dsize=(w, h))
         cls.full()
         cv2.imshow(cls.windows_name, cls.board)
