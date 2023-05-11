@@ -20,14 +20,17 @@ class Board:
     def create_board_plus(cls, w=1000, h=1000):
         cls.board = cv2.imread("back.png")
         cls.board = cv2.resize(cls.board, dsize=(w, h))
-        cv2.setMouseCallback(cls.windows_name, cls.call_back_mouse, None)
+        cls.full()
+        cv2.imshow("chessboard", cls.board)
+
+
+
 
     # 创建棋盘
     @classmethod
     def create_board(cls):
-        cls.create_board_plus()
-        cls.full()
-        cls.board_refresh()
+        cls.create_board_plus(800, 800)
+
 
     # 刷新棋盘
     @classmethod
@@ -80,18 +83,22 @@ class Board:
     @classmethod
     def mouse_click(cls):
         cls.create_board()
+        print(1)
         cv2.setMouseCallback(Board.windows_name, cls.call_back_mouse)
+        print(2)
         cls.board_refresh()
         pass
 
     # 找落点
     @classmethod
     def find_point(cls, st_p):
+        print(1)
         for point in cls.point_list:
             scope = []
             for j in range(cls.space):
                 scope.append([[point[0] - int(cls.space / 2) + i, point[1] - int(cls.space / 2)]
                               for i in range(Board.space)])
+                print(scope)
             if st_p in scope:
                 cls.place_piece(point)
 

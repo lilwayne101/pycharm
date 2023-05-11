@@ -1,7 +1,7 @@
 import random
 import time
-random.seed(1)
 import numpy as np
+random.seed(1)
 
 
 class Linear:
