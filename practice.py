@@ -223,6 +223,8 @@ import random
 
 
 import torch.nn as nn
+from torch import optim
+
 #
 # # 交叉熵损失函数(多分类)
 # nn.CrossEntropyLoss()
@@ -327,32 +329,161 @@ import torch.nn as nn
 #     print(h.shape)
 #     print(h)
 
-class Mynet(nn.Module):
-    def __init__(self):
-        super().__init__()
-        # mnist数据集(1*28*28)
-        self.fc_layer1 = nn.Linear(784, 128)
-        self.relu1 = nn.ReLU()
-        self.fc_layer2 = nn.Linear(128, 64)
-        self.relu2 = nn.ReLU()
-        self.fc_layer3 = nn.Linear(64, 2)
-        self.softmax = nn.Softmax(dim=1)
 
-    def forward(self, x):
-       x = self.fc_layer1(x)
-       x = self.relu1(x)
-       x = self.fc_layer2(x)
-       x = self.relu2(x)
-       x = self.fc_layer3(x)
-       return self.softmax(x)
+# class Mynet(nn.Module):
+#
+#     def __init__(self):
+#         super().__init__()
+#         # mnist数据集(1*28*28)
+#         self.fc_layer1 = nn.Linear(784, 128)
+#         self.relu1 = nn.ReLU()
+#         self.fc_layer2 = nn.Linear(128, 64)
+#         self.relu2 = nn.ReLU()
+#         self.fc_layer3 = nn.Linear(64, 2)
+#         self.softmax = nn.Softmax(dim=1)
+#
+#     def forward(self, x):
+#         x = self.fc_layer1(x)
+#         x = self.relu1(x)
+#         x = self.fc_layer2(x)
+#         x = self.relu2(x)
+#         x = self.fc_layer3(x)
+#         return self.softmax(x)
+#
+#
+# if __name__ == "__main__":
+#     net = Mynet()
+#     data = torch.randn(10, 784)
+#     h = net.forward(data)
+#     print(h.shape)
+#     # print(net)
+#     print(h)
 
 
-if __name__ == "__main__":
-    net = Mynet()
-    data = torch.randn(10, 784)
-    h = net.forward(data)
-    print(h.shape)
-    # print(net)
-    print(h)
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+#
+# # 构建分类模型
+# model = nn.Sequential(
+#     nn.Linear(3, 3),
+#     nn.Softmax()
+# )
+#
+# # 定义交叉熵损失函数
+# criterion = nn.CrossEntropyLoss()
+#
+# # 生成模拟数据
+# inputs = torch.tensor([[0, 0, 1], [1, 0, 0], [0, 1, 0]])
+# labels = torch.tensor([2, 0, 1])
+#
+# # 定义优化器,这里使用SGD
+# optimizer = optim.SGD(model.parameters(), lr=0.01)
+#
+# # 梯度下降步骤中清零参数的梯度
+# optimizer.zero_grad()
+#
+# # 根据模型输出和 ground truth 计算Loss
+# outputs = model(inputs)
+# loss = criterion(outputs, labels)
+#
+# # 反向传播计算梯度
+# loss.backward()
+#
+# # 使用优化器更新参数
+# optimizer.step()
+#
+# # 输出Loss
+# print(loss)
+# # tensor(1.1772, grad_fn=<NllLossBackward>)
+
+# # XOR前馈网络
+# # 创建训练数据
+# # 输入有两个特征值
+# D = 2
+# # 定义输入X
+# # (4, 2)
+# X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+# # 定义目标T
+# # (4, 1)
+# T = np.array([[0], [1], [1], [0]])
+#
+#
+# # 定义激活函数Sigmoid()函数 用于输出层， 将值压缩到0-1区间，适合未分类问题
+# def sigmoid(x):
+#     return 1 / (1 + np.exp(-x))
+#
+#
+# # 定义激活函数Relu
+# def relu(x):
+#     return np.maximum(0, x)
+#
+#
+# # 初始化权重
+# # np.random.randn()：产生随机正态分布数，用来初始化w1和w2
+# # np.sqrt()计算平方根, 这是Xavier初始化方法，可以避免梯度爆炸(梯度过大)或梯度消失(梯度为0)
+# w1 = np.random.randn(D, 3) / np.sqrt(D)     # (2, 3)
+# # np.zeros()创建全0数组,这里用于偏执b1的初始化
+# b1 = np.zeros((1, 3))   # (1, 3)
+# w2 = np.random.randn(3, 1) / np.sqrt(3)     # (3, 1)
+# b2 = 0
+#
+# # 前向传播
+# a1 = X.dot(w1) + b1    # (4, 2) * (2, 3) + (1, 3) ---> (4, 3)
+#
+# """
+# [[0.5        0.5        0.5       ]
+#  [0.6353178  0.67516274 0.82683442]
+#  [0.54106523 0.27767439 0.3008182 ]
+#  [0.67254773 0.44413487 0.67259634]]
+# """
+# # z1 = sigmoid(a1)    # (4, 3) ---> (4, 3)
+# z1 = relu(a1)
+# print(z1)
+# """
+# [[-0.00607235]
+#  [ 0.06135837]
+#  [ 0.12685384]
+#  [ 0.17380995]]
+# """
+# a2 = z1.dot(w2) + b2    # (4, 3) * (3, 1) + 0---> (4, 1)
+#
+# """
+# [[0.66432295]
+#  [0.65725995]
+#  [0.67109316]
+#  [0.66503364]]
+# """
+# # y = sigmoid(a2)     # (4, 1) ---> (4, 1)
+# y = sigmoid(a2)
+#
+# # 计算损失和梯度
+# t = T       # (4, 1)
+# # sigmoid()结果 0.6949073561104447
+# # relu()结果  0.6906923663845261
+# loss = -(t * np.log(y) + (1 - t) * np.log(1 - y)).mean()    # loss = [(1-t)log(1-y) -(tlogy)].mean()
+
+# # 矩阵相乘
+# m = np.array([1, 2, 3, 4])
+# m1 = m.T
+# n = np.array([1, 2, 3, 4])
+# r = m * n   # [ 1  4  9 16]
+# r1 = m1 * n     # [ 1  4  9 16]
+# m2 = np.array([[1, 2, 3], [1, 2, 5]])   # (2, 3)
+# m3 = m2.T
+# n1 = np.array([[1, 2, 3], [1, 2, 5]])   # (2, 3)
+# r2 = m2 * n1    # (2, 3) * (2, 3) --->(2, 3) np的广播机制
+# # r3 = m3 * n1    # operands could not be broadcast together with shapes (3,2) (2,3)
+# # r4 = np.dot(m2, n1)     # ValueError: shapes (2,3) and (2,3) not aligned: 3 (dim 1) != 2 (dim 0)
+# """
+# [[ 2  4  8]
+#  [ 4  8 16]
+#  [ 8 16 34]]
+# """
+# r3 = np.dot(m3, n1)  # (3, 2) * (2, 3) --->(3, 3)
+
+
+
+
 
 
