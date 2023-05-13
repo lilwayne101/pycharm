@@ -1,5 +1,6 @@
 import math
 
+import cv2
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
@@ -67,12 +68,15 @@ from matplotlib import pyplot as plt
 # t1 = torch.Tensor([1, 2, 3])
 # t2 = torch.FloatTensor([1, 2, 3])
 # t3 = torch.tensor([1, 2, 3], dtype=torch.long)
+# t4 = torch.tensor([1, 2, 3])
 # # torch.float32
 # print(t1.dtype)
 # # torch.float32
 # print(t2.dtype)
 # # torch.int64
 # print(t3.dtype)
+# # torch.int64
+# print(t4.dtype)
 # # torch.int32
 # print(t1.int().dtype)
 # # torch.float64
@@ -482,7 +486,11 @@ from torch import optim
 # """
 # r3 = np.dot(m3, n1)  # (3, 2) * (2, 3) --->(3, 3)
 
-
+img = cv2.imread("H:\data\MNIST//train//8//25445.jpg")
+# data = img.reshape(-1)
+print(img)
+# print(data)
+print(torch.cuda.is_available())
 
 
 
