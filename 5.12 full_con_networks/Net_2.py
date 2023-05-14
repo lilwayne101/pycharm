@@ -9,6 +9,7 @@ from torchvision import datasets, transforms
 import torchvision.datasets.mnist as mnist
 import os
 from skimage import io
+from  torch.utils.tensorboard import SummaryWriter
 # NCHW结构
 # NV结构 (NCHW结构的数据展平)
 
@@ -133,6 +134,7 @@ class Trainer:
         self.test_loader = torch.utils.data.DataLoader(dataset=self.test_dataset, batch_size=30000, shuffle=True)
         # 模型训练完成，得到h，loss，反向更新，优化器去优化模型的权重
         self.opt = torch.optim.Adam(self.net.parameters())
+        self.summerWriter = SummaryWriter("logs")
 
     def train(self):
         for epoch in range(10000):
@@ -157,8 +159,9 @@ class Trainer:
                 if i % 10 == 0:
                     torch.save(self.net.state_dict(), f"params//{i}.pth")
             avg_loss = sum_loss / len(self.train_loader)
+            self.summerWriter.add_scalar("训练损失", avg_loss, epoch)
             print(f"第{epoch}轮次的损失{avg_loss}")
-15
+
     def test(self):
         # 把最优的训练效果进行测试
         self.net.load_state_dict(torch.load(r"params//" + os.listdir(r"params")[-1]))
@@ -178,6 +181,7 @@ class Trainer:
                 score = torch.mean(torch.eq(a, b).float())
                 sum_score += score
             avg_score = sum_score / len(self.test_loader)
+            self.summerWriter.add_scalar("测试得分", avg_score, epoch)
             print(f"第{epoch}轮次的得分{avg_score}")
 
 
