@@ -2470,30 +2470,35 @@ X和Y逐位进行比较,选择最大值
 
 # 练习2:判断图像倾斜角度并矫正
 # 判断图像主方向
-# edges = cv2.Canny(img, 100, 200)
-# lines = cv2.HoughLines(edges, 1, np.pi / 180, 150)
-# if lines is None:
-#     print("未读取到明显线段")
-#     dst = img
-# else:
-#     theta = lines[:, 0, 1]
-#
-#     # 计算倾斜角度
-#     m = np.median(theta)
-#     deviation = abs(theta - m)
-#     angle = m * 180 / np.pi
-#
-#     # 旋转矫正
-#     rotation_matrix = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1)
-#     dst = cv2.warpAffine(img, rotation_matrix, (w, h))
-#
-# cv2.imshow("img", img)
-# cv2.imshow("edges", edges)
-# cv2.imshow("output", dst)
-# cv2.waitKey(0)
+img = cv2.imread(r"I:\pycharm_temp\pycharm_not_gitcode\pycharm\pic\020.jpg")
+img = cv2.resize(img, (200, 200))
+
+h, w, c = img.shape
+M = cv2.getRotationMatrix2D((h / 2, w / 2), 45, 0.5)
+img = cv2.warpAffine(img, M, (h, w))
+edges = cv2.Canny(img, 100, 200)
+lines = cv2.HoughLines(edges, 1, np.pi / 180, 150)
+if lines is None:
+    print("未读取到明显线段")
+    dst = img
+else:
+    theta = lines[:, 0, 1]
+
+    # 计算倾斜角度
+    m = np.median(theta)
+    deviation = abs(theta - m)
+    angle = m * 180 / np.pi
+
+    # 旋转矫正
+    rotation_matrix = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1)
+    dst = cv2.warpAffine(img, rotation_matrix, (w, h))
+
+cv2.imshow("img", img)
+cv2.imshow("edges", edges)
+cv2.imshow("output", dst)
+cv2.waitKey(0)
 
 # 滑块
-
 
 def nothing(x):
     return x
@@ -2501,12 +2506,89 @@ def nothing(x):
 
 img = cv2.imread(r"I:\pycharm_temp\pycharm_not_gitcode\pycharm\pic\020.jpg")
 img = cv2.resize(img, (600, 600))
+h, w, c = img.shape
 cv2.namedWindow("image")
-x = cv2.createTrackbar("Resize", "image", 300, 900, nothing)
-img = cv2.resize(img, (nothing(x), nothing(x)))
+cv2.createTrackbar("Resize", "image", 500, 700, nothing)
+cv2.createTrackbar("Gauss", "image", 0, 10, nothing)
+# cv2.createTrackbar("X", "image", 0, 10, nothing)
+# cv2.createTrackbar("Y", "image", 0, 10, nothing)
+img_gauss = copy.deepcopy(img)
+img_return = copy.deepcopy(img)
 
-cv2.imshow("image", img)
-cv2.waitKey(0)
+while True:
+    cv2.imshow("image", img)
+    size = cv2.getTrackbarPos("Resize", "image")
+    gauss = cv2.getTrackbarPos("Gauss", "image")
+    if size == h:
+        img = img_return
+        cv2.imshow("image", img)
+    img = cv2.resize(img, (size, size), interpolation=cv2.INTER_CUBIC)
+    img_gauss = cv2.resize(img_gauss, (size, size), interpolation=cv2.INTER_CUBIC)
+    if gauss == 0:
+        img = img_gauss
+    elif gauss % 2 == 1:
+        img = cv2.GaussianBlur(img, (gauss, gauss), 0)
+
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
 cv2.destroyAllWindows()
+
+# res = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+# res = cv2.resize(img, (2 * w, 2 * h), interpolation=cv2.INTER_CUBIC)
+# M = np.float32([[1, np.pi, 0], [np.pi, 1, 0]])
+# res = cv2.warpAffine(img, M, (w, h))
+# cv2.imshow("res", res)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+
+# img = cv2.imread(r"I:\pycharm_temp\pycharm_not_gitcode\pycharm\pic\chess.png")
+#
+# h, w, c = img.shape
+#
+#
+# def nothing(x):
+#     return x
+#
+#
+# cv2.namedWindow("image")
+# pst1 = np.float32([[491, 180], [81, 384], [991, 348], [595, 580]])
+# cv2.createTrackbar("X1", "image", 0, w, nothing)
+# cv2.createTrackbar("Y1", "image", 0, h, nothing)
+# cv2.createTrackbar("X2", "image", 0, w, nothing)
+# cv2.createTrackbar("Y2", "image", 0, h, nothing)
+# cv2.createTrackbar("X3", "image", 0, w, nothing)
+# cv2.createTrackbar("Y3", "image", 0, h, nothing)
+# cv2.createTrackbar("X4", "image", 0, w, nothing)
+# cv2.createTrackbar("Y4", "image", 0, h, nothing)
+#
+# while True:
+#     x_1 = cv2.getTrackbarPos("X1", "image")
+#     y_1 = cv2.getTrackbarPos("Y1", "image")
+#     x_2 = cv2.getTrackbarPos("X2", "image")
+#     y_2 = cv2.getTrackbarPos("Y2", "image")
+#     x_3 = cv2.getTrackbarPos("X3", "image")
+#     y_3 = cv2.getTrackbarPos("Y3", "image")
+#     x_4 = cv2.getTrackbarPos("X4", "image")
+#     y_4 = cv2.getTrackbarPos("Y4", "image")
+#     M = cv2.getPerspectiveTransform(pst1, np.float32([[x_1, y_1], [x_2, y_2], [x_3, y_3], [x_4, y_4]]))
+#     img_1 = cv2.warpPerspective(img, M, (800, 800))
+#
+#     cv2.imshow("image_2", img_1)
+#     if cv2.waitKey(1) & 0xFF == ord("q"):
+#         break
+# cv2.destroyAllWindows()
+
+
+
+
+
+
+
+
+
+
+
 
 
