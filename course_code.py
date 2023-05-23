@@ -1,11 +1,13 @@
 import copy
+import math
 import random
 from filecmp import cmp
 import os
-
+import matplotlib.pyplot as plt
 
 import cv2
 import numpy as np
+from PIL import ImageFont, Image, ImageDraw, ImageFilter
 
 # 直接赋值
 # a = 3
@@ -1180,114 +1182,114 @@ import json
 """
 
 
-class Person:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-
-class Goods:
-    def __init__(self, name, price, num_stock):
-        self.name = name
-        self.price = price
-        self.num_stock = num_stock
-        self.type = 'others'
-
-    def sell(self):
-        self.num_stock -= 1
-
-
-class Food(Goods):
-    def __init__(self, name, price, num_stock):
-        super().__init__(name, price, num_stock)
-        self.type = 'food'
-
-
-class Appliance(Goods):
-    def __init__(self, name, price, num_stock):
-        super().__init__(name, price, num_stock)
-        self.type = 'appliance'
-
-
-class Customer(Person):
-    def __init__(self, name, age, shopping_cart: list):
-        super().__init__(name, age)
-        self.shopping_cart = shopping_cart
-
-    def shopping(self, goods: Goods):
-        self.shopping_cart.append(goods)
-        return print(f"已将{goods}添加至{self.name}的购物车")
-
-
-class Cashier(Person):
-    def __init__(self, name, age, checkout_counter):
-        super().__init__(name, age)
-        self.checkout_counter = checkout_counter
-        self.count = 0
-
-    def bill(self, customer: Customer):
-        i = 0
-        print(f"顾客：{customer.name}")
-        for goods in customer.shopping_cart:
-            i += 1
-            print(f"{i}:{goods.name}----{goods.price}元")
-            self.count += goods.price
-        print(f"共计：{self.count}元")
-
-
-class Courier(Person):
-    def __init__(self, delivery_order, delivery_time, name, age):
-        super().__init__(name, age)
-        self.delivery_order = delivery_order
-        self.delivery_time = delivery_time
-        self.status = "未发货"
-
-    def delivery(self, goods):
-        self.status = "已发货"
-        print(f"{goods}：{self.status}")
-
-
-class Order:
-    def __init__(self, order_time, delivery_time, order_status, order_goods_list):
-        self.order_time = order_time
-        self.delivery_time = delivery_time
-        self.order_status = order_status
-        self.order_goods_list = order_goods_list
-
-    def read_order_data(self, path):
-        with open(path, "r", encoding="utf-8") as data_order:
-            data_order = json.loads(data_order.read())
-        return data_order
-
-    def create_order_list(self, order_data):
-        order_list = []
-        for index, order in order_data.items():
-            order_list.append(Order(order["order_time"], order["delivery_time"],
-                                    order["order_status"], order["order_goods_list"]))
-        return order_list
-
-    def connection(self, courier: Courier):
-        print(f"{courier.status}")
-
-class Mall:
-    def __init__(self, personnel_dic, commodity_category_dic, order_list):
-        self.personnel_dic = personnel_dic
-        self.commodity_category_dic = commodity_category_dic
-        self.order_list = order_list
-
-    def add_commodity_cate(self, goods):
-        self.commodity_category_dic[goods.type].append(goods)
-        return self.commodity_category_dic
-
-    def add_person(self, person):
-        self.personnel_dic[person.__name__].append()
-        return self.personnel_dic
-
-    def product_order(self):
-        pass
-
-    def shipping_order(self):
-        pass
+# class Person:
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.age = age
+#
+#
+# class Goods:
+#     def __init__(self, name, price, num_stock):
+#         self.name = name
+#         self.price = price
+#         self.num_stock = num_stock
+#         self.type = 'others'
+#
+#     def sell(self):
+#         self.num_stock -= 1
+#
+#
+# class Food(Goods):
+#     def __init__(self, name, price, num_stock):
+#         super().__init__(name, price, num_stock)
+#         self.type = 'food'
+#
+#
+# class Appliance(Goods):
+#     def __init__(self, name, price, num_stock):
+#         super().__init__(name, price, num_stock)
+#         self.type = 'appliance'
+#
+#
+# class Customer(Person):
+#     def __init__(self, name, age, shopping_cart: list):
+#         super().__init__(name, age)
+#         self.shopping_cart = shopping_cart
+#
+#     def shopping(self, goods: Goods):
+#         self.shopping_cart.append(goods)
+#         return print(f"已将{goods}添加至{self.name}的购物车")
+#
+#
+# class Cashier(Person):
+#     def __init__(self, name, age, checkout_counter):
+#         super().__init__(name, age)
+#         self.checkout_counter = checkout_counter
+#         self.count = 0
+#
+#     def bill(self, customer: Customer):
+#         i = 0
+#         print(f"顾客：{customer.name}")
+#         for goods in customer.shopping_cart:
+#             i += 1
+#             print(f"{i}:{goods.name}----{goods.price}元")
+#             self.count += goods.price
+#         print(f"共计：{self.count}元")
+#
+#
+# class Courier(Person):
+#     def __init__(self, delivery_order, delivery_time, name, age):
+#         super().__init__(name, age)
+#         self.delivery_order = delivery_order
+#         self.delivery_time = delivery_time
+#         self.status = "未发货"
+#
+#     def delivery(self, goods):
+#         self.status = "已发货"
+#         print(f"{goods}：{self.status}")
+#
+#
+# class Order:
+#     def __init__(self, order_time, delivery_time, order_status, order_goods_list):
+#         self.order_time = order_time
+#         self.delivery_time = delivery_time
+#         self.order_status = order_status
+#         self.order_goods_list = order_goods_list
+#
+#     def read_order_data(self, path):
+#         with open(path, "r", encoding="utf-8") as data_order:
+#             data_order = json.loads(data_order.read())
+#         return data_order
+#
+#     def create_order_list(self, order_data):
+#         order_list = []
+#         for index, order in order_data.items():
+#             order_list.append(Order(order["order_time"], order["delivery_time"],
+#                                     order["order_status"], order["order_goods_list"]))
+#         return order_list
+#
+#     def connection(self, courier: Courier):
+#         print(f"{courier.status}")
+#
+# class Mall:
+#     def __init__(self, personnel_dic, commodity_category_dic, order_list):
+#         self.personnel_dic = personnel_dic
+#         self.commodity_category_dic = commodity_category_dic
+#         self.order_list = order_list
+#
+#     def add_commodity_cate(self, goods):
+#         self.commodity_category_dic[goods.type].append(goods)
+#         return self.commodity_category_dic
+#
+#     def add_person(self, person):
+#         self.personnel_dic[person.__name__].append()
+#         return self.personnel_dic
+#
+#     def product_order(self):
+#         pass
+#
+#     def shipping_order(self):
+#         pass
 
 
 # python 操作文件夹的方法和规则
@@ -1717,4 +1719,794 @@ from threading import Timer
 # np.concatenate(img, img_b)
 
 # numpy 广播 要求行列等轴至少有一个相等
+
+# img = Image.open("./back.png")
+# print(type(img))
+# draw = ImageDraw.Draw(img)
+# font = ImageFont.truetype(r"G:\AaTangZiYingHua\AaTangZiYingHua\AaTangZiYingHua-2.ttf", size=36)
+# draw.text((100, 100), text="你好 师姐", fill=(255, 255, 255), font=font)
+# img = np.array(img)
+# # img.show()
+# img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+# # img = Image.fromarray(img)
+# # img.show()
+#
+# cv2.imshow(" ", img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# a = np.array(range(12)).reshape(2, 6)
+# print(a)
+# print(sum(a[0, -1: 3]))
+
+# print(np.min([1, 2, 3]))
+# print(np.max([[1, 2, 3], [4, 5, 6]], axis=1))
+# print(np.mean([1, 2, 3]))
+
+# print(np.argmax([1, 2, 3, 4, 5]))
+# print(np.argmin([1, 2, 3]))
+# print(np.where(np.array([1, 5, 4, 5, 3]) > 3))
+
+# print(np.hstack(([)[1, 2, 3], [1, 2, 3])))
+# print(np.vstack(([1, 2, 3], [4, 5, 6])))
+
+# print(np.round(1.4444, 2))
+# 向上取证
+# print(np.ceil(1.4))
+# 向下取证
+# print(np.floor([1.5]))
+
+# 对角矩阵
+# print(np.identity(2, dtype=np.int_))
+# print(np.min([1, 2, 3]))
+# print(np.max([[1, 2, 3], [2, 3, 4], [4, 5, 6]], axis=1))
+# print(np.mean([1, 2, 3]))
+# 中位数
+# print(np.median(np.array([1, 2, 1, 3])))
+# sum(avg * w) / sum(w)
+# print(np.average([1, 2, 1], weights=[1, 2, 1]))
+# 删除维度为1的维度（3， 1）--》（3）
+# print(np.squeeze([[1], [2], [3]]))
+
+# a = [-1, -1, -3, 5, 4]
+# 非零元素的索引
+# (array([0, 1, 2, 4], dtype=int64),)
+# print(np.nonzero(a))
+# 非零元素的个数
+# print(np.count_nonzero(a))
+# 将非零元素的索引做成（n,1）的数组
+# print(np.argwhere(a))
+# print(np.abs([a]))
+
+# 超出界限的值赋值为界限值，界限之内的不变
+# print((np.clip(a, -3, 4)))
+# 对两个一维数组去重并放在一个一维数组中
+# print(np.union1d([1, 2, 3], [2, 3, 3]))
+# 将数组分割成指定个数的数组
+# print(np.hsplit(np.array([1, 2, 3, 4]), 4))
+# 按照第一个维度将数组分割成指定个数的数组
+# print(np.vsplit(np.array([[[1, 2, 3], [3, 4, 5]], [[1, 4, 6], [2, 3, 4]]]), 2))
+# print(np.sort(a))
+# 去重
+# print(np.unique(a))
+# 判断对应元素是否相等
+# print(np.equal([2, 3, 2], [2, 3, 4]))
+# 重复指定个数的元素形成数组
+# print(type(np.repeat("2023", 3)))
+# 将指定元素填入指定shape的数组中
+# print(np.tile("2023", (2, 2)))
+# print(np.std(a))
+# print(np.var(a))
+
+# print(np.empty((10, 10)))
+# print(np.linspace(1, 10, 2))
+
+# print(np.random.randint(np.full((10, 10), fill_value=1), np.full((10, 10), fill_value=10)))
+
+
+# a = np.arange(1, 10).reshape(3, 3)
+# print(a)
+#
+# for x in np.nditer(a, order="F"):
+#     print(x, end=" ")
+# print("\n--------------------")
+# for x in np.nditer(a, order="C"):
+#     print(x, end="")
+
+# a = np.arange(9*9).reshape(3, 3, 9)
+# print(a)
+# print("-----------------")
+# print(a.transpose((1, 0, 2)))
+#
+# a = np.array(range(9)).reshape(3, 3)
+
+# a = np.arange(9).reshape(3, 3)
+# b = np.arange(9).reshape(3, 3)
+# print(np.concatenate((a, b), axis=1))
+
+# print(np.append(a, [[4], [5], [6]], axis=1))
+
+# a = np.arange(12).reshape(3, 4)
+# print(a)
+# print(np.delete(a, 5))
+
+# print(np.delete(a, 1, axis=0))
+
+# print(np.where(a == 6))
+
+# a = np.array(range(9)).reshape(3, 3)
+# b = np.array(range(9)).reshape(3, 3)
+# print(a)
+# print(np.dot(a, b))
+# print(np.inner(a, b))
+
+# # (15, 1)
+# img = np.random.randint(0, 255, 15)
+# print(img)
+# print(img.shape)
+# # (5, 15)
+# w = np.random.random((5, 15))
+# print(np.dot(w, img))
+# print(np.inner(img, w))
+
+# 2
+# class User:
+#     def __init__(self,name):
+#         self.name = name
+#     pass
+#
+# user1 = User("1")
+# userList = [user1]
+# user2 = User("2")
+#
+# a = copy.copy(userList)
+# b = copy.deepcopy(userList)
+# userList.append(user2)
+# print(a)
+# print(userList)
+# print(b)
+
+# 3
+# arr_3d = np.array([[1, 2], [2, 3], [1, 2], [2, 3]])
+# arr_3d = arr_3d.reshape(-1)
+# print(arr_3d)
+
+
+"""
+#使用代码完成下面的二维数组，边界值为1，其余值为0 
+[   [1. 1. 1. 1. 1.] 
+    [1. 0. 0. 0. 1.] 
+    [1. 0. 0. 0. 1.] 
+    [1. 0. 0. 0. 1.] 
+    [1. 1. 1. 1. 1.]
+]
+"""
+# arr = np.ones((5, 5))
+# arr[1:4, 1:4] = 0
+# print(arr)
+
+"""
+5. 观察下列数组使用代码完成
+最后得到的数组： 
+[[ 1 4 255 5]
+[ 5 255 255 255]
+[ 9 10 255 255]]
+"""
+# a = np.array([[1, 4, 2, 5],
+#               [5, 6, 7, 8],
+#               [9, 10, 12, 13]
+# ])
+# # (3, 4)
+# c = np.array([[8, 7, 255, 6],
+#               [5, 255, 255, 255],
+#               [3, 5, 255, 255]
+# ])
+
+# idx = np.where(c==255)
+# a[idx] = 255
+# print(idx)
+# print(a)
+
+# data = np.where(c == 255, c, a)
+# print(data)
+"""
+6. 如现在四个同学对球球、冷檬、蘑菇头 三人舞蹈进行打分的一个数据（总分为10），每个同学分
+别从三个角度打分：
+item = np.array([ [3,5,8], [4,6,5], [3,8,3], [2,6,9] ])
+1) 如果我们想看看哪个同学最喜欢看跳舞。
+2) 看看哪位同学最受欢迎。
+"""
+# stu = ["球球", "冷檬", "蘑菇头"]
+# item = np.array([
+#     [3, 5, 8],
+#     [4, 6, 5],
+#     [3, 8, 3],
+#     [2, 6, 9]
+# ])
+# itemMean0 = np.mean(item, axis=0)
+# itemMean1 = np.mean(item, axis=1)
+# itemVar0 = np.var(item, axis=0)
+# itemVar1 = np.var(item, axis=1)
+# itemMaxMean0 = np.argmax(itemMean0)
+# itemMaxMean1 = np.argmax(itemMean1)
+# itemMinVar0 = np.argmin(itemVar0)
+# itemMinVar1 = np.argmin(itemVar1)
+# # print(itemMaxMean0)
+# print(f"第{itemMaxMean1}个同学最喜欢看跳舞")
+# print(f"{stu[itemMaxMean0]}最受同学欢迎")
+
+"""
+1. 求矩形的面积
+ 现在给定两个矩形区域的坐标 分别使用box 和 boxes表示 元素对应表示为
+ [x1, y1, x2, y2], x1,y1表示矩形左上角的点 x2, y2表示矩形右下角的点 
+ box = np.array( [2, 2, 20, 15])
+ boxes = np.array([[15, 12, 25, 21]])
+1) 分别作图画出 两个矩形区域
+2） 分别求出两个矩形的面积
+3) 相交部分的面积
+备注: np.maximum(X, Y)
+X和Y逐位进行比较,选择最大值
+如下:
+"""
+
+# box = np.array([2, 2, 20, 15])
+# boxes = np.array([15, 12, 25, 21])
+# areaBox = (box[2]-box[0]) * (box[3]-box[1])
+# areaBoxes = (boxes[2]-boxes[0]) * (boxes[3]-boxes[1])
+# areaMix = (box[3]-boxes[1]) * (box[2]-boxes[0])
+# print(areaBox)
+# print(areaBoxes)
+# print(areaMix)
+
+# box = np.array([2, 2, 20, 15])
+# boxes = np.array([
+#     [15, 12, 25, 21],
+#     [13, 12, 25, 21],
+#     [12, 12, 25, 21]
+# ])
+#
+#
+# def areas(box, boxes):
+#     boxArea = (box[2] - box[0]) * (box[3] - box[1])
+#     boxesArea = (boxes[:, 0] - boxes[:, 2]) * (boxes[:, 1] - boxes[:, 3])
+#     print(boxArea)
+#     print(boxesArea)
+#     interX1 = np.maximum(box[0], boxes[:, 0])
+#     interY1 = np.maximum(box[1], boxes[:, 1])
+#     interX2 = np.minimum([box[2], boxes[:, 2]])
+#     interY2 = np.minimum(box[3], boxes[:, 3])
+#     print(interY2.shape)
+#     # l = max(0, interY2 - interY1)
+#     # d = max(0, interX2 - interX1)
+#     # mixArea = l * d
+#     # print(mixArea)
+#
+#
+# areas(box, boxes)
+
+
+"""
+2. 给定三个点，求夹角。
+"""
+# a = np.array([1, 2])
+# b = np.array([5, 8])
+# c = np.array([3, 10])
+# print(np.dot(np.subtract(c, a), np.subtract(b, a)))
+# cos = np.dot(np.subtract(c, a), np.subtract(b, a)) /
+# (np.linalg.norm(np.subtract(c, a)) * np.linalg.norm(np.subtract(b, a)))
+# angle = np.arccos(cos)
+# print(f"角A为：{np.degrees(angle)}")
+# cos = np.dot(np.subtract(c, b), np.subtract(a, b)) /
+# (np.linalg.norm(np.subtract(c, b)) * np.linalg.norm(np.subtract(a, b)))
+# angle = np.arccos(cos)
+# print(f"角B为：{np.degrees(angle)}")
+# cos = np.dot(np.subtract(a, c), np.subtract(b, c)) /
+# (np.linalg.norm(np.subtract(a, c)) * np.linalg.norm(np.subtract(b, c)))
+# angle = np.arccos(cos)
+# print(f"角C为：{np.degrees(angle)}")
+
+
+# x = np.array(range(10))
+# y = np.random.randint(0, 100, len(x))
+# plt.rcParams['font.sans-serif'] = ['SimHei']   # 设置默认字体
+# plt.subplot(2, 2, 1)
+# plt.plot(x, y, linewidth="2.0", linestyle="dotted", color="red", markersize=10, marker="s", label="折线图", alpha=0.5)
+# plt.title('折线图', font='SimHei')  # 指定标题字体为黑体
+# # 饼状图
+# plt.subplot(2, 2, 2)
+# plt.pie(x, autopct="%1.3f%%", shadow=True, labeldistance=1, radius=1)
+# plt.title('饼状图', font='SimHei')  # 指定标题字体为黑体
+# # 散点图
+# plt.subplot(2, 2, 3)
+# plt.title('散点图', font='SimHei')  # 指定标题字体为黑体
+# plt.scatter(x, y, c="r", marker="s", s=10, alpha=0.7, edgecolors="g", linewidths=1)
+# # 柱状图
+# plt.plot(2, 2, 4)
+# plt.title('柱状图', font='SimHei')  # 指定标题字体为黑体
+# plt.bar(x, y, width=0.2, color="r", linewidth=5, linestyle="dashed")
+# plt.show()
+
+# x = np.array(range(10))
+# plt.ion()
+# times = 10
+# while times > 0:
+#     y = np.random.randint(0, 100, len(x))
+#     plt.cla()
+#     plt.bar(x, y)
+#     plt.show()
+#     plt.pause(1)
+#     # time.sleep(1)
+#     times -= 1
+# plt.ioff()
+
+# img = cv2.imread(r"G:\pycharm_not_gitcode\pycharm\back.png")
+# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+# plt.subplot(211)
+# plt.imshow(img)
+# plt.subplot(212)
+# plt.imshow(img)
+# plt.show()
+
+
+# img_data = np.array(np.full((300, 300, 3), fill_value=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), dtype=np.uint8))
+# img_data = np.random.randint(0, 255, 300 * 300 * 3, dtype=np.uint8).reshape(300, 300, 3)
+
+# h, w, c = img_data.shape
+# for i in range(h):
+#     for k in range(w):
+#         img_data[k,i,:] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+# img = Image.fromarray(img_data)
+
+# img = Image.new("RGB", size=(50, 50), color=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+# img.show()
+#
+# print(img.format)
+# print(img.size)
+# print(img.readonly)
+# print(img.mode)
+# img = img.convert("L")
+# img = img.convert("RGB")
+# img = Image.open(r"G:\pycharm_not_gitcode\pycharm\5.10_Gomoku\039-040.jpg")
+# img = img.resize((100, 100))
+# img.show()
+
+# path = r"C:\Users\Wangchengyang\Desktop\新建文件夹"
+# list_dirs = os.listdir(path)
+# for dir in list_dirs:
+#     basename, ext = os.path.splitext(dir)
+#     if ext == ".jpg":
+#         path_temp = r"./pic"
+#         path_abs = os.path.join(os.getcwd(), path_temp)
+#         print(path_abs)
+#         if not os.path.exists(path_abs):
+#             os.mkdir(path_temp)
+#         img = Image.open(os.path.join(path, dir))
+#         img = img.resize((100, 100))
+#         img.save(os.path.join(path_abs, dir))
+
+# box 原图的局部缩放
+# img = img.resize((100, 100), box=(10, 10, 110, 110))
+
+# img = Image.open(r"G:\pycharm_not_gitcode\pycharm\pic")
+
+# (r, g, b) = img.split()
+# r.show()
+# g.show()
+# b.show()
+# new_img = Image.merge("RGB", (r, g, b))
+# new_img.show()
+
+# img = img.crop((10, 10, 50, 50))
+# img = img.rotate(90)
+# img.show()
+
+# draw = ImageDraw.Draw(img)
+# draw.ellipse([(0, 0), (45, 98)], fill="#f00")
+# img.show()
+
+# 二维码
+# class RandList:
+#     def __init__(self):
+#         self.list_rand = []
+#         self.w = 800
+#         self.h = 200
+#         self.space = 200
+#         self.img = None
+#         self.back = None
+#         self.window_name = "back"
+#         self.size = 200
+#
+#     # 随机数
+#     def rand_nums(self):
+#         self.list_rand.extend([chr(i) for i in range(65, 91)])
+#         self.list_rand.extend([chr(i) for i in range(48, 58)])
+#         self.list_rand.extend([chr(i) for i in range(97, 123)])
+#         random.shuffle(self.list_rand)
+#         return self.list_rand[0], self.list_rand[1], self.list_rand[2], self.list_rand[3]
+#
+#     # 背景
+#     def back_ground(self):
+#         # self.img = np.random.randint(0, 255, (50, 200, 3), dtype=np.uint8)
+#         self.img = np.full((self.h, self.w, 3), fill_value=self.random_color(), dtype=np.uint8)
+#         self.img = Image.fromarray(self.img)
+#         draw = ImageDraw.Draw(self.img)
+#         for i in range(self.size):
+#             for j in range(self.size):
+#                 draw.rectangle((int(i * self.w / self.size), int(j * self.h / self.size),
+#                                 int((i+1) * self.w / self.size), int((j + 1) * self.h / self.size)),
+#                                fill=self.random_color())
+#         self.img = self.img.filter(ImageFilter.GaussianBlur(3))
+#
+#     # 将数贴到背景上
+#     def paste_back(self):
+#         self.back_ground()
+#         self.add_noise()
+#         nums = self.rand_nums()
+#         for index, num in enumerate(nums):
+#             mask = Image.new("RGBA", (self.h, self.h), (225, 255, 255, 0))
+#             draw = ImageDraw.Draw(mask)
+#             draw.text((20, 20), text=num,fill=self.random_color(), font=self.random_font())
+#             mask = mask.rotate(random.randint(-45, 45))
+#             # mask.show()
+#             self.img.paste(mask, (random.randint(0, 20 + self.space * index), 20), mask=mask)
+#             self.back = np.array(self.img)
+#         cv2.imshow(self.window_name, self.back)
+#
+#     # 背景加噪声
+#     def add_noise(self):
+#         for i in range(5):
+#             left_point = (random.randint(0, int((self.w - 1) / 2)), random.randint(0, int((self.h - 1) / 2)))
+#             right_point = (random.randint(0, self.w - 1), random.randint(0, self.h - 1))
+#             draw = ImageDraw.Draw(self.img)
+#             draw.ellipse([left_point, right_point], outline=self.random_color(), width=5)
+#             draw.point([left_point, right_point], fill=self.random_color())
+#             draw.line([left_point, right_point,
+#                       (random.randint(0, int((self.w - 1) / 2)), random.randint(0, int((self.h - 1) / 2))),
+#                        (random.randint(0, self.w - 1), random.randint(0, self.h - 1))])
+#             img = self.random_pic()
+#             img = img.rotate(random.randint(-45, 45), expand=1, fillcolor="white")
+#             img_mask = self.mask_make(img)
+#             self.img.paste(img, (random.randint(0, self.w), random.randint(0, self.h)), mask=img_mask)
+#             # img = self.random_pic()
+#             # img = img.rotate(random.randint(-45, 45))
+#             # self.img.paste(img, (random.randint(0, self.w), random.randint(0, self.h)), mask=img)
+#
+#     def refresh(self):
+#         cv2.imshow(self.window_name, self.back)
+#         key = cv2.waitKey(0)
+#         if key == ord("p"):
+#             cv2.destroyAllWindows()
+#
+#     def click(self):
+#         self.paste_back()
+#         cv2.setMouseCallback(self.window_name, self.mouse_call_back, None)
+#         self.refresh()
+#
+#     # 鼠标事件
+#     def mouse_call_back(self, event, x, y, flags, param):
+#         if event == cv2.EVENT_LBUTTONDOWN:
+#             self.paste_back()
+#             cv2.imshow(self.window_name, self.back)
+#
+#     # 随机字体
+#     def random_font(self):
+#         root = r"H:\学习内容\mtcnn_arcloss\font"
+#         list_font = []
+#         # print(os.listdir(root))
+#         for dir in os.listdir(root):
+#             rand_path = os.path.join(root, dir)
+#             list_font.append(rand_path)
+#         random.shuffle(list_font)
+#         return ImageFont.truetype(list_font[0], size=random.randint(100, 150))
+#
+#     # 图片噪声
+#     def random_pic(self, threshold=120):
+#         root = r"G:\pycharm_not_gitcode\pycharm\pic"
+#         dirs = os.listdir(root)
+#         save_path = os.path.join(root, "pic1")
+#         if not os.path.exists(save_path):
+#             os.mkdir(save_path)
+#         path_list = []
+#         for index, dir in enumerate(dirs):
+#             basename, ext = os.path.splitext(dir)
+#             if ext == ".jpg" or ext == ".png":
+#                 path = os.path.join(root, dir)
+#                 img = Image.open(path)
+#                 img = img.resize((100, 100))
+#                 # self.img.paste(img, (0, 0), mask=self.mask_make(img))
+#                 if not os.path.exists(os.path.join(save_path, dir)):
+#                     img.save(os.path.join(save_path, f"{index}.png"))
+#         for dir in os.listdir(save_path):
+#             path = os.path.join(save_path, dir)
+#             path_list.append(path)
+#         random.shuffle(path_list)
+#         return Image.open(path_list[0])
+#
+#     # 抠图的蒙板
+#     def mask_make(self,image, threshold=200):
+#         # 将图像转为灰度图
+#         grayscale_image = image.convert("L")
+#         # grayscale_image.show()
+#         # 定义二值化转换函数
+#         def binarize(pixel):
+#             if pixel > threshold:
+#                 return 0
+#             else:
+#                 return 255
+#         binary_image = grayscale_image.point(binarize, mode="1")
+#         return binary_image
+#
+#     # 随机颜色
+#     def random_color(self):
+#         return tuple(np.random.randint(0, 255, 3))
+#
+#
+# randlist = RandList()
+# randlist.click()
+# randlist.random_pic()
+# randlist.mask_pic()
+
+# 画图板
+# 随意划线
+# 可以画直线,矩形,圆圈
+# 绘制过程需要体现
+# 清除区域内容
+# 移动内容
+# 画图的选项
+# 写字
+
+# 画图板
+# class DrawWindow:
+#     def __init__(self):
+#         self.end_point = (-1, -1)
+#         self.move_point = None
+#         self.window_name = "board"
+#         self.size = (800, 800, 3)
+#         self.tool_size = (200, 800, 3)
+#         self.tool_board = None
+#         self.board = None
+#         self.start_point = (-1, -1)
+#
+#     #  创建背景窗口
+#     def create_window(self):
+#         self.board = np.full(self.size, fill_value=(255, 255, 255), dtype=np.uint8)
+#         self.tool_board = np.full(self.tool_size, fill_value=(252, 230, 201), dtype=np.uint8)
+#         # self.board[0:int(self.tool_board[0]), 0:int(self.tool_size[1]),:] = self.tool_board[:,:,:]
+#         # self.board = cv2.imread(r"I:\pycharm_not_gitcode\pycharm\python_pycharm\Day_14\Mom.jpg")
+#         # h, w, c = self.board.shape
+#         cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
+#         # cv2.resizeWindow(self.window_name, w, h)
+#         # cv2.imshow(self.window_name, self.board)
+#         # key = cv2.waitKey(0)
+#         # if key == ord("p"):
+#         #     cv2.destroyAllWindows()
+#
+#     # 窗口刷新
+#     def board_fresh(self):
+#         key = cv2.waitKey(0)
+#         if key == ord("p"):
+#             cv2.destroyAllWindows()
+#
+#     # 绘制图形
+#     def drawing(self):
+#         self.create_window()
+#         cv2.imshow(self.window_name, self.board)
+#         key = cv2.waitKey(0)
+#         if key == ord("l"):
+#             self.drawing_line()
+#         if key == ord("r"):
+#             self.drawing_rectangle()
+#         if key == ord("c"):
+#             self.drawing_circle()
+#
+#
+#     # 绘制直线
+#     def drawing_line(self):
+#         cv2.setMouseCallback(self.window_name, self.line_call_back, None)
+#         cv2.imshow(self.window_name, self.board)
+#         self.board_fresh()
+#
+#     # 绘制矩形
+#     def drawing_rectangle(self):
+#         cv2.setMouseCallback(self.window_name, self.rectangle_call_back, None)
+#         cv2.imshow(self.window_name, self.board)
+#         self.board_fresh()
+#
+#     # 绘制圆形
+#     def drawing_circle(self):
+#         cv2.setMouseCallback(self.window_name, self.circle_call_back, None)
+#         cv2.imshow(self.window_name, self.board)
+#         self.board_fresh()
+#
+#     # 绘制直线的鼠标响应
+#     def line_call_back(self, event, x, y, flags, param):
+#         board = copy.deepcopy(self.board)
+#         if event == cv2.EVENT_LBUTTONDOWN:
+#             self.start_point = (x, y)
+#             # print(self.start_point)
+#         if event == cv2.EVENT_MOUSEMOVE:
+#             if self.start_point[0] >= 0 and self.end_point[0] == -1:
+#                 self.move_point = (x, y)
+#                 # print(self.move_point)
+#                 cv2.line(board, self.start_point, self.move_point, (192, 192, 192), 2)
+#                 cv2.imshow(self.window_name, board)
+#                 # self.board_fresh()
+#         if event == cv2.EVENT_LBUTTONUP:
+#             self.end_point = (x, y)
+#             cv2.line(board, self.start_point, self.end_point, (0, 0, 0), 2)
+#             self.start_point = (-1, -1)
+#             self.end_point = (-1, -1)
+#             self.board = board
+#             cv2.imshow(self.window_name, self.board)
+#             self.board_fresh()
+#
+#     # 绘制矩形
+#     def rectangle_call_back(self, event, x, y, flags, param):
+#         board = copy.deepcopy(self.board)
+#         if event == cv2.EVENT_LBUTTONDOWN:
+#             self.start_point = (x, y)
+#             # print(self.start_point)
+#         if event == cv2.EVENT_MOUSEMOVE:
+#             if self.start_point[0] >= 0 and self.end_point[0] == -1:
+#                 self.move_point = (x, y)
+#                 # print(self.move_point)
+#                 cv2.rectangle(board, self.start_point, self.move_point, (100, 100, 0), 2)
+#                 cv2.imshow(self.window_name, board)
+#                 # self.board_fresh()
+#         if event == cv2.EVENT_LBUTTONUP:
+#             self.end_point = (x, y)
+#             cv2.rectangle(board, self.start_point, self.end_point, (0, 0, 0), 2)
+#             self.start_point = (-1, -1)
+#             self.end_point = (-1, -1)
+#             self.board = board
+#             cv2.imshow(self.window_name, self.board)
+#             self.board_fresh()
+#
+#     # 绘制圆形
+#     def circle_call_back(self, event, x, y, flags, param):
+#         board = copy.deepcopy(self.board)
+#         if event == cv2.EVENT_LBUTTONDOWN:
+#             self.start_point = (x, y)
+#             # print(self.start_point)
+#         if event == cv2.EVENT_MOUSEMOVE:
+#             if self.start_point[0] >= 0 and self.end_point[0] == -1:
+#                 self.move_point = (x, y)
+#                 radius = int(math.sqrt((self.move_point[0] - self.start_point[0]) ** 2 +
+#                                    (self.move_point[1] - self.start_point[1]) ** 2))
+#                 # print(self.move_point)
+#                 cv2.circle(board, self.start_point, radius, (100, 100, 0), 2)
+#                 cv2.imshow(self.window_name, board)
+#                 # self.board_fresh()
+#         if event == cv2.EVENT_LBUTTONUP:
+#             self.end_point = (x, y)
+#             radius = int(math.sqrt((self.end_point[0] - self.start_point[0]) ** 2 +
+#                                (self.end_point[1] - self.start_point[1]) ** 2))
+#             cv2.circle(board, self.start_point, radius, (0, 0, 0), 2)
+#             self.start_point = (-1, -1)
+#             self.end_point = (-1, -1)
+#             self.board = board
+#             cv2.imshow(self.window_name, self.board)
+#             self.board_fresh()
+#
+#
+# drawWindow = DrawWindow()
+# drawWindow.drawing()
+
+# img = cv2.imread(r"I:\pycharm_temp\pycharm_not_gitcode\pycharm\pic\020.jpg")
+# img = cv2.resize(img, (200, 200))
+# small_1 = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+# small_2 = cv2.resize(img, (0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
+
+# large_1 = cv2.resize(img, (0, 0), fx=3, fy=3)
+# # # 最近邻插值
+# large_2 = cv2.resize(img, (0, 0), fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
+# # # 双线性插值
+# large_3 = cv2.resize(img, (0, 0), fx=3, fy=3, interpolation=cv2.INTER_LINEAR)
+# # # 双三次插值
+# large_4 = cv2.resize(img, (0, 0), fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+# # # dst = cv2.resize(img, (90, 90))
+
+# cv2.imshow("img", img)
+# cv2.imshow("small", small)
+# cv2.imshow("large_1", large_1)
+# cv2.imshow("large_2", large_2)
+# cv2.imshow("large_3", large_3)
+# cv2.imshow("large_4", large_4)
+# cv2.imshow("dst", dst)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# h, w, c = img.shape
+# # cv2.namedWindow("img", cv2.WINDOW_FREERATIO)
+# # # 旋转90度
+# M = cv2.getRotationMatrix2D((h / 2, w / 2), 45, 0.5)
+# img = cv2.warpAffine(img, M, (h, w))
+# cv2.namedWindow("img", cv2.WINDOW_FREERATIO)
+# img_1 = cv2.getRotationMatrix2D((h/2, w/2), angle=90, scale=0.5)
+# dat = cv2.warpAffine(img, M, (h, w))
+#
+# cv2.imshow("img", img)
+# cv2.imshow("dst", dst)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# 水平/垂直倾斜
+# k = 0.3  # 倾斜因子
+# Mh = np.float32([[1, k, 0], [0, 1, 0]])
+# dsth = cv2.warpAffine(img, Mh, (w, h), borderMode=cv2.BORDER_REFLECT)
+
+# 垂直倾斜
+# k = -0.2  # 倾斜因子
+# Mv = np.float32([[1, k, 0], [0, 1, 0]])
+# # 图像翻转填充
+# dstv_1 = cv2.warpAffine(img, Mv, (w, h), borderMode=cv2.BORDER_WRAP)
+# # 边缘像素反射
+# dstv_2 = cv2.warpAffine(img, Mv, (w, h), borderMode=cv2.BORDER_REFLECT)
+# # 复制最边缘像素
+# dstv_3 = cv2.warpAffine(img, Mv, (w, h), borderMode=cv2.BORDER_REPLICATE)
+# # 透明填充
+# dstv_4 = cv2.warpAffine(img, Mv, (w, h), borderMode=cv2.BORDER_TRANSPARENT)
+#
+# cv2.imshow("d_1", dstv_1)
+# cv2.imshow("d_2", dstv_2)
+# cv2.imshow("d_3", dstv_3)
+# cv2.imshow("d_4", dstv_4)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# 平移
+# 平移参数
+# x = 100     # 水平平移
+# y = 50      # 垂直平移
+#
+# M = np.float32([[1, 0, x], [0, 1, y]])
+# img_1 = cv2.warpAffine(img, M, (h, w))
+#
+# cv2.imshow("img", img)
+# cv2.imshow("img_1", img_1)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# 练习2:判断图像倾斜角度并矫正
+# 判断图像主方向
+# edges = cv2.Canny(img, 100, 200)
+# lines = cv2.HoughLines(edges, 1, np.pi / 180, 150)
+# if lines is None:
+#     print("未读取到明显线段")
+#     dst = img
+# else:
+#     theta = lines[:, 0, 1]
+#
+#     # 计算倾斜角度
+#     m = np.median(theta)
+#     deviation = abs(theta - m)
+#     angle = m * 180 / np.pi
+#
+#     # 旋转矫正
+#     rotation_matrix = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1)
+#     dst = cv2.warpAffine(img, rotation_matrix, (w, h))
+#
+# cv2.imshow("img", img)
+# cv2.imshow("edges", edges)
+# cv2.imshow("output", dst)
+# cv2.waitKey(0)
+
+# 滑块
+
+
+def nothing(x):
+    return x
+
+
+img = cv2.imread(r"I:\pycharm_temp\pycharm_not_gitcode\pycharm\pic\020.jpg")
+img = cv2.resize(img, (600, 600))
+cv2.namedWindow("image")
+x = cv2.createTrackbar("Resize", "image", 300, 900, nothing)
+img = cv2.resize(img, (nothing(x), nothing(x)))
+
+cv2.imshow("image", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
 

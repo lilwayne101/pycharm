@@ -1,16 +1,19 @@
+import copy
 import random
 
 import cv2
 import numpy as np
+from PIL import ImageDraw, ImageFont, Image
 
 
 # 定义棋盘
 class Board:
     # 棋盘
     b_p_r = None
+    white_count = 0
+    black_count = 0
     m = 0
-    white = []
-    black = []
+    chess_count = {"白棋": 0, "黑棋": 1}
     times = 0
     scope = None
     board = None
@@ -21,13 +24,14 @@ class Board:
     # 棋盘尺寸
     board_size = (800, 800, 3)
     # 棋子落点
+    board_temp = None
     point_list = []
     windows_name = "Gomoku"
 
     # 创建棋盘板
     @classmethod
     def create_board_plus(cls, w=1000, h=1000):
-        cls.board = cv2.imread("OIP-C.jpg")
+        cls.board = cv2.imread("back.png")
         cls.board = cls.board[:, :, :]
         cls.board = cv2.resize(cls.board, dsize=(w, h))
         cls.full()
@@ -76,10 +80,11 @@ class Board:
             st_p_t = (round((x / cls.space)), round(y / cls.space))
             x_t = round((x / cls.space))
             y_t = round(y / cls.space)
-            print(st_p_t)
             list_t = [1, -1, 0]
             if cls.judgment_board[st_p_t] == 0 and x_t*y_t * (st_p_t[0] - 20) *(st_p_t[1] - 20)!= 0:
                 cls.place_piece(st_p)
+
+                cls.acount(0)
                 cls.judgment_board[st_p_t] = 1
                 cls.win(st_p_t)
                 k = 0
@@ -91,9 +96,9 @@ class Board:
                             break
                     b_p = (b_p_t[0] * cls.space, b_p_t[1] * cls.space)
                     cls.place_piece(b_p, color=(22, 22, 22))
+                    cls.acount(1)
                     cls.judgment_board[b_p_t] = -1
                     cls.win(b_p_t)
-                    print(b_p_t)
                     cls.m = 1
                 else:
                     kb = 0
@@ -114,19 +119,20 @@ class Board:
                         if cls.judgment_board[b_p_t] == 0 and jdment <= 1 and b_p_t[0] * b_p_t[1] * (b_p_t[0] - 20) * (
                                 b_p_t[1] - 20) != 0:
                             if k == 21:
-                                print("asdfasdfdasfsadfasdfsad")
                                 while cls.judgment_board[b_p_t] != 0 and b_p_t[0] * b_p_t[1] * (b_p_t[0] - 20) * (
                                         b_p_t[1] - 20) != 0:
                                     b_p_t = (random.randint(1, 19), random.randint(1, 19))
                                     b_p = (b_p_t[0] * cls.space, b_p_t[1] * cls.space)
                             cls.place_piece(b_p, color=(22, 22, 22))
+
+                            cls.acount(1)
                             cls.judgment_board[b_p_t] = -1
                             cls.b_p_r = b_p_t
                             cls.win(b_p_t)
 
                             k = 1
                             kb = 1
-            cls.board_refresh()
+            # cls.board_refresh()
         pass
 
     # 鼠标点击
@@ -140,20 +146,17 @@ class Board:
     # 判断胜负
     @classmethod
     def win(cls, point):
-        s1 = np.sum(cls.judgment_board[point[0]:point[0] + 5, point[1]])
-        s2 = np.sum(cls.judgment_board[point[0] - 4:point[0] + 1, point[1]])
-        s3 = np.sum(cls.judgment_board[point[0], point[1]: point[1] + 5])
-        s4 = np.sum(cls.judgment_board[point[0], point[1] - 4: point[1]+1])
-        s5 = sum([cls.judgment_board[point[0] - i, point[1] - i] for i in range(5)])
-        s6 = sum([cls.judgment_board[point[0] - i, point[1] + i] for i in range(5)])
-        s7 = sum([cls.judgment_board[point[0] + i, point[1] - i] for i in range(5)])
-        s8 = sum([cls.judgment_board[point[0] + i, point[1] + i] for i in range(5)])
-        if 5 in [s1, s2, s3, s4, s5, s6, s7, s8]:
-            print("白胜")
-            cv2.destroyAllWindows()
-        if -5 in [s1, s2, s3, s4, s5, s6, s7, s8]:
-            print("黑胜")
-            cv2.destroyAllWindows()
+        for k in range(5):
+            s1 = np.sum(cls.judgment_board[point[0] - k:point[0] - k + 5, point[1]])
+            s3 = np.sum(cls.judgment_board[point[0], point[1] - k: point[1] - k + 5])
+            s5 = sum([cls.judgment_board[point[0] + k - i, point[1] + k - i] for i in range(5)])
+            s6 = sum([cls.judgment_board[point[0] - i + k, point[1] + i - k] for i in range(5)])
+            if 5 in [s1, s3, s5, s6, ]:
+                print("白胜")
+                cv2.destroyAllWindows()
+            if -5 in [s1, s3, s5, s6]:
+                print("黑胜")
+                cv2.destroyAllWindows()
         pass
 
     # 黑棋自走
@@ -161,8 +164,32 @@ class Board:
     def choice_black(cls):
         pass
 
+    # 已下棋子数
+    @classmethod
+    def acount(cls, k):
+        # 白棋为0 黑为1
+        cls.board_temp = copy.deepcopy(cls.board)
+        board = cls.board_temp
+        # print(type(board))
+        img = Image.fromarray(board)
+        # print(img)
+        # img = np.array(cls.board)
+        # img = Image.fromarray(img)
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype(r"G:\AaTangZiYingHua\AaTangZiYingHua\AaTangZiYingHua-2.ttf", size=15)
+        draw.text((0, 0), text=f"{list(cls.chess_count.keys())[0]}: {list(cls.chess_count.values())[0]}",
+                  fill=(0, 0, 0), font=font)
+        draw.text((740, 0), text=f"{list(cls.chess_count.keys())[1]}: {list(cls.chess_count.values())[1]}",
+                  fill=(0, 0, 0), font=font)
+        img = np.array(img)
+        # print(type(img))
+        # img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        board = np.array(img)
+        # cls.board = board
+        cls.chess_count[list(cls.chess_count.keys())[k]] += 1
+        cv2.imshow(cls.windows_name, board)
+        # cls.board = Image.fromarray(img)
 
 Board.mouse_click()
-
 
 
