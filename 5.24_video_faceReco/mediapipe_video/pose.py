@@ -33,4 +33,7 @@ class Pose:
                                                       pose_connections,
                                                       posesype,
                                                       lineesype)
+            for index, point in enumerate(pose_points):
+                x, y = point[:2]
+                cv2.putText(image, str(index), org=(x, y), fontFace=cv2.FONT_HE)
         return image

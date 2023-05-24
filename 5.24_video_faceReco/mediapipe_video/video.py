@@ -12,7 +12,7 @@ class Video:
         self.face = Face()
 
     def cap_video(self):
-        video = cv2.VideoCapture(1)
+        video = cv2.VideoCapture(0)
         while video.isOpened():
             retval, self.image = video.read()
             if not retval:
@@ -25,7 +25,7 @@ class Video:
             # 肢体识别
             self.image = self.pose.pose_landmarks(self.image)
             # 脸部识别
-            self.image = self.face.face_landmarks(self.image)
+            # self.image = self.face.face_landmarks(self.image)
             self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
             cv2.imshow("MediaPipe Hand", self.image)
             if cv2.waitKey(1) == ord("q"):

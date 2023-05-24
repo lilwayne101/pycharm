@@ -17,11 +17,12 @@ class Face:
 
     def face_landmarks(self, image):
         self.face_results = self.face.process(image)
+        landmark = self.face_results.multi_face_landmarks.landmark
         if self.face_results.multi_face_landmarks:
             # 获取脸部关键点
             face_points = np.array(
                 [face_landmark.x, face_landmark.y, face_landmark.z]
-                for face_landmark in self.multi_face_results.face_landmarks.landmark)
+                for face_landmark in self.face_results.multi_face_landmarks)
             # 设置关键点style
             facesype = mp.solutions.drawing_utils.DrawingSpec(color=(0, 255, 255), thickness=2)
             # 设置线条style
@@ -29,7 +30,7 @@ class Face:
             # 手部关键点的连接
             face_connections = mp.solutions.face_mesh_connections
             mp.solutions.drawing_utils.draw_landmarks(image,
-                                                      self.multi_face_results.face_landmarks,
+                                                      self.face_results.multi_face_landmarks,
                                                       face_connections,
                                                       facesype,
                                                       lineesype)
