@@ -83,13 +83,13 @@ class FaceDetect:
         # 创建一个黑色背景图
         mask = np.zeros(logo_binary.shape, dtype=np.uint8)
         cv2.drawContours(mask, contours, 0, color=(255, 255, 255), thickness=5)
-        cv2.imshow('logo', logo)
-        cv2.imshow('logo_gray', logo_gray)
-        cv2.imshow('logo_binary', logo_binary)
-        cv2.imshow('mask', mask)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-        pass
+        # cv2.imshow('logo', logo)
+        # cv2.imshow('logo_gray', logo_gray)
+        # cv2.imshow('logo_binary', logo_binary)
+        # cv2.imshow('mask', mask)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        # pass
 
 
 

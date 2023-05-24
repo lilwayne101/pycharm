@@ -12,7 +12,7 @@ class FaceRecoVideo:
     # 定义视频人脸加logo类方法
     def logo_face_video(self):
         # 调用序列为0的摄像头,并返回cap
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(1)
         # 判断摄像头打开执行循环
         while cap.isOpened():
             # 读取摄像头
