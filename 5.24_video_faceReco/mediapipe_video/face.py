@@ -14,8 +14,10 @@ class Face:
                                           )
         # pose读取
         self.face_results = None
+        self.face_points = None
 
     def face_landmarks(self, image):
+        height, width = image.shape[:2]
         self.face_results = self.face.process(image)
         if self.face_results.multi_face_landmarks:
             # 获取脸部关键点
@@ -33,4 +35,15 @@ class Face:
                                                       face_connections,
                                                       facesype,
                                                       lineesype)
+            for idx, point in enumerate(self.face_points):
+                x = int(point[0] * width)
+                y = int(point[1] * height)
+                cv2.putText(image,
+                            str(idx),
+                            (x, y),
+                            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                            fontScale=1,
+                            color=(0, 255, 0),
+                            thickness=1,
+                            lineType=cv2.LINE_AA)
         return image

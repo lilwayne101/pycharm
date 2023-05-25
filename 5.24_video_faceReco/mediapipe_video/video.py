@@ -4,6 +4,7 @@ from hand import Hands
 from pose import Pose
 from face import Face
 
+
 class Video:
     def __init__(self):
         self.image = None
@@ -19,19 +20,20 @@ class Video:
                 print("can not get image")
                 break
             self.image = cv2.flip(self.image, 1)
-            self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
             # 手部识别
-            self.image = self.hands.hand_landmarks(self.image)
+            self.image = self.hands.add_image(self.image)
             # 肢体识别
-            self.image = self.pose.pose_landmarks(self.image)
+            # self.image = self.pose.pose_landmarks(self.image)
             # 脸部识别
-            self.image = self.face.face_landmarks(self.image)
+            # self.image = self.face.face_landmarks(self.image)
             self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
             cv2.imshow("MediaPipe Hand", self.image)
             if cv2.waitKey(1) == ord("q"):
                 break
         video.release()
         cv2.destroyAllWindows()
+
+
 
 
 video = Video()
