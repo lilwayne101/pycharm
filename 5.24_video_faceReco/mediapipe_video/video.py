@@ -13,7 +13,7 @@ class Video:
         self.face = Face()
 
     def cap_video(self):
-        video = cv2.VideoCapture(1)
+        video = cv2.VideoCapture(0)
         while video.isOpened():
             retval, self.image = video.read()
             if not retval:
