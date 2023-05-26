@@ -486,12 +486,44 @@ from torch import optim
 # """
 # r3 = np.dot(m3, n1)  # (3, 2) * (2, 3) --->(3, 3)
 
-img = cv2.imread("H:\data\MNIST//train//8//25445.jpg")
-# data = img.reshape(-1)
-print(img)
-# print(data)
-print(torch.cuda.is_available())
+# img = cv2.imread("H:\data\MNIST//train//8//25445.jpg")
+# # data = img.reshape(-1)
+# print(img)
+# # print(data)
+# print(torch.cuda.is_available())
 
+# x = np.arange(-10, 10, 0.01)
+# y1 = x ** 2
+# y2 = np.power(x, 2)
+# y3 = pow(x, 3)
+# plt.plot(x, y1)
+# plt.plot(x, y2)
+# plt.plot(x, y3)
+# plt.show()
 
+# x = np.linspace(-10, 10, 2000)
+# y1 = np.exp(x)
+# y2 = np.exp2(x)
+# y3 = np.expm1(x)
+# plt.plot(x, y1)
+# plt.plot(x, y2)
+# plt.plot(x, y3)
+# plt.show()
 
+# 对数函数
+# x = np.linspace(0.00001, 10, 1000)
+# y1 = np.log(x)
+# y2 = np.log2(x)
+# y3 = np.log10(x)
+# plt.plot(x, y1)
+# plt.plot(x, y2)
+# plt.plot(x, y3)
+# plt.show()
 
+# sigmoid
+# x = np.arange(-10, 10, 0.001)
+# sigmoid = 1 / (1 + np.exp(-x))
+# d_sigmoid = sigmoid * (1 - sigmoid)
+# plt.plot(x, sigmoid)
+# plt.plot(x, d_sigmoid)
+# plt.show()

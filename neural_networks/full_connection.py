@@ -1,6 +1,7 @@
 import random
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 random.seed(1)
 
 
@@ -50,6 +51,7 @@ y[2] = 1
 x = np.array([random.random() for i in range(10)])
 linear = Linear(10, 10)
 adam = Adam(linear)
+x_ = 0
 while True:
     xq = linear(x)
     xq = Relu()(xq)
@@ -59,4 +61,7 @@ while True:
     time.sleep(0.5)
     adam.send(x, loss)
     x = xq
+    x += 1
     time.sleep(0.1)
+
+
