@@ -14,9 +14,10 @@ transform = transforms.Compose(
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
 )
 
-root = r"H:\data\Cifar10"
-cifar10_train = datasets.CIFAR10(root=r"H:\data\Cifar10", train=True, transform=transform, download=True)
-cifar10_test = datasets.CIFAR10(root=r"H:\data\Cifar10", train=False, transform=transform, download=True)
+root = r"E:\data\Cifar10"
+os.makedirs(root, exist_ok=True)
+cifar10_train = datasets.CIFAR10(root=root, train=True, transform=transforms.ToTensor(), download=True)
+cifar10_test = datasets.CIFAR10(root=root, train=False, transform=transforms.ToTensor(), download=True)
 
 
 
@@ -52,9 +53,9 @@ class Trainer:
         # 初始化tensorboard
         self.summerWriter = SummaryWriter("logs")
         # 读取训练集
-        self.train_dataloader = DataLoader(dataset=cifar10_train, batch_size=1024, shuffle=True)
+        self.train_dataloader = DataLoader(dataset=cifar10_train, batch_size=256, shuffle=True)
         # 读取测试集
-        self.test_dataloader = DataLoader(dataset=cifar10_test, batch_size=700, shuffle=True)
+        self.test_dataloader = DataLoader(dataset=cifar10_test, batch_size=256, shuffle=True)
         # 定义设备
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         # 将网络放入设备
@@ -131,7 +132,7 @@ class Trainer:
 
 if __name__ == "__main__":
     trainer = Trainer()
-    # trainer.train()
-    trainer.test()
+    trainer.train()
+    # trainer.test()
 
 

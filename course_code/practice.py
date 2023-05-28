@@ -46,23 +46,32 @@ from matplotlib import pyplot as plt
 
 # Relu 函数
 # x = np.arange(-10, 10, 0.1)
+# inter_0 = [1 if i < 0 else 0 for i in x]
+# inter_1 = [1 if i >= 0 else 0 for i in x]
 # y = np.maximum(0, x)
+# y_ = 0 * inter_0 + 1 * inter_1
 # plt.plot(x, y)
+# plt.plot(x, y_)
 # plt.show()
 
 # tanh(双曲正切)
 # x = np.arange(-10, 10, 0.01)
 # y = np.tanh(x)
+# y_ = 1 - y ** 2
 # plt.plot(x, y)
+# plt.plot(x, y_)
 # plt.show()
 # plt.close()
 
 
 # Softmax(归一化指数函数)(输出函数)
-
 # import torch
-#
-# t1 = torch.
+# x = np.arange(-10, 10, 0.01)
+# x_ = torch.Tensor(x)
+# y = torch.softmax(x_, dim=0)
+# plt.plot(x_, y)
+# plt.show()
+# plt.close()
 
 
 # t1 = torch.Tensor([1, 2, 3])
@@ -228,6 +237,7 @@ import random
 
 import torch.nn as nn
 from torch import optim
+from tqdm import tqdm
 
 #
 # # 交叉熵损失函数(多分类)
@@ -535,30 +545,50 @@ from torch import optim
 # plt.show()
 
 # 数据集
-_x = [i * 0.01 for i in range(100)]
-# 回归权重w=5, b=5
-_y = [x * 5 + 5 + random.random() for x in _x]
-# 初始化权重
-w = random.random()
-b = random.random()
-while True:
-    for x, y in zip(_x, _y):
-        # 预测值
-        h = w * x + b
-        # loss
-        loss = (h - y) ** 2
-        # dw, db
-        dw = 2 * x * (h - y)
-        db = 2 * (h - y)
-        # 反向传播,权重更新
-        r = 0.001
-        w -= dw * r
-        b -= db * r
-        plt.pause(0.1)
-        plt.plot(_x, _y, ".")
-        plt.ion()
-        plt.plot(x, w * x + b)
+# _x = [i * 0.01 for i in range(100)]
+# # 回归权重w=5, b=5
+# _y = [x * 5 + 5 + random.random() for x in _x]
+# # 初始化权重
+# w = random.random()
+# b = random.random()
+# while True:
+#     for x, y in zip(_x, _y):
+#         # 预测值
+#         h = w * x + b
+#         # loss
+#         loss = (h - y) ** 2
+#         # dw, db
+#         dw = 2 * x * (h - y)
+#         db = 2 * (h - y)
+#         # 反向传播,权重更新
+#         r = 0.001
+#         w -= dw * r
+#         b -= db * r
+#         print(f"loss:{loss}\tw:{w},b:{b}")
+#         plt.pause(0.1)
+#         plt.ion()
+#         plt.plot(_x, _y, ".")
+#         y = [w * x + b for x in _x]
+#         plt.plot(_x, y)
+#         # plt.ioff()
+#         plt.show()
 
-    plt.show()
+# x = np.linspace(-1, 1, 10000)
+# y = np.maximum(0, x + random.random())
+# plt.plot(x, y)
+# plt.title("Randomized ReLU")
+# plt.show()
 
 
+# x = np.arange(-10, 10, 0.01)
+# inter_0 = [1 if i < 0 else 0 for i in x]
+# inter_1 = [1 if i >= 0 else 0 for i in x]
+# a = 0.5
+# y = a * (np.exp(inter_0 * x) - 1) + inter_1 * x
+# dy = (y + a) * inter_0 + inter_1 * 1
+# plt.plot(x, y)
+# plt.plot(x, dy)
+# plt.show()
+
+# pbar = tqdm(total=100)
+# pbar.set_description('Processing')
